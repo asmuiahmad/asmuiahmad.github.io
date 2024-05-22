@@ -38,6 +38,21 @@
             <div class="intro">
               <div class="intro--banner">
                 <h1>Hello<br>Everyone</h1>
+                <div class="hero">
+                  <h2 class="hero-typed"></h2>
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+                  <script>
+                    // Wait for the document to be fully loaded
+                    document.addEventListener("DOMContentLoaded", function() {
+                      // Initialize Typed.js
+                      var typed = new Typed('.hero-typed', {
+                        strings: ["Welcome to My Website"], // Add your desired sentences here
+                        typeSpeed: 50, // Adjust the typing speed as needed
+                        loop: true // Set to true if you want the typing to loop
+                      });
+                    });
+                  </script>
+                </div>
                 <button class="cta">Contact me
                   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
                   <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
@@ -166,7 +181,7 @@
                 <div class="modal">
                   <div class="modal--information">                    
                     <a href="mailto:asmui.ahmad@muslim.com">asmui.ahmad@muslim.com</a>
-                    <a href="tel:+6285176702810">(+62)851----2810</a>
+                    <a href="tel:+6285176702810">+6285176702810</a>
                   </div>
                   <ul class="modal--options">
                     <li><a href="https://www.facebook.com/asmui.ahmad28/">facebook</a></li>
@@ -274,7 +289,8 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
-<script src="assets/js/functions-min.js"></script>
+                      <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
+                      <script src="assets/js/functions-min.js"></script>
+                      <script src="assets/js/typed.js"></script>
 </body>
 </html>
