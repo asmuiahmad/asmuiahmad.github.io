@@ -1871,3 +1871,13 @@ body {
     -webkit-transition-delay: .16s;
     transition-delay: .16s
 }
+
+.hero-typed {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 25px;
+}
+
+.typed-cursor {
+    font-size: 25px;
+}
