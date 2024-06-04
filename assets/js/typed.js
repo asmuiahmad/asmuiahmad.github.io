@@ -8,13 +8,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function updateTitle() {
-    // Get the current title
     var currentTitle = document.title;
-    // Rotate the title by shifting the first character to the end
     var newTitle = currentTitle.substring(1) + currentTitle.charAt(0);
-    // Add a space after each character
     newTitle = newTitle.split('').join(' ');
-    // Set the new title
     document.title = newTitle;
 }
 
