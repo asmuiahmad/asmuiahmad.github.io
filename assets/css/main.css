@@ -534,7 +534,7 @@ body {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .header--nav-toggle span,
@@ -554,7 +554,7 @@ body {
 
 .header--nav-toggle::after {
     top: 5px;
-    width: 23px
+    width: 23px;
 }
 
 .header--cta {
@@ -1880,4 +1880,13 @@ body {
 
 .typed-cursor {
     font-size: 25px;
+}
+
+.margin-btn-home {
+    padding-top: 5px;
+    margin-bottom: 20px;
+}
+
+.herodiv {
+    margin: 7px;
 }
