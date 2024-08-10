@@ -30,7 +30,14 @@
     font-style: normal
 }
 
-/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
 html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
@@ -38,7 +45,15 @@ html {
 }
 
 body {
-    margin: 0
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom left, #b6b4b4e0, #1d1d1d, #0a0a0a, #000000);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
 }
 
 article,
@@ -291,7 +306,7 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
-    box-shadow: 0 0 45px 5px rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 45px 5px rgba(248, 248, 248, 0.85);
     overflow: hidden
 }
 
@@ -327,7 +342,7 @@ body {
     width: 2px;
     height: 70%;
     max-height: 750px;
-    background-color: #555;
+    background-color: #c5c5c5;
     opacity: .35;
     z-index: 10
 }
@@ -476,7 +491,7 @@ body {
 
 .header {
     position: absolute;
-    top: 0;
+    top: 15px;
     left: 0;
     display: -webkit-box;
     display: -webkit-flex;
@@ -495,39 +510,19 @@ body {
     z-index: 10
 }
 
-.header--logo {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    text-decoration: none;
-    color: #fff
-}
-
-.header--logo p {
-    margin: 0 0 0 10px;
-    font-size: 16px;
-    font-weight: 700;
-    text-transform: uppercase
-}
-
 .header--nav-toggle {
     display: flex;
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     position: absolute;
-    top: 5px; /* Adjust as needed */
-    right: 5px; /* Adjust as needed */
-    background-color: transparent; /* Make the background transparent */
-    border: none; /* Remove border if any */
+    top: 15px;
+    right: 8px;
+    background-color: transparent;
+    border: none;
 }
 
 .header--nav-toggle span,
@@ -537,7 +532,7 @@ body {
     position: relative;
     width: 16px;
     height: 2px;
-    background-color: #fff; /* Color of the bars */
+    background-color: #ffffff;
 }
 
 .header--nav-toggle::before {
@@ -1351,6 +1346,9 @@ body {
 
 .contact {
     position: fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     top: 0;
     left: 0;
     width: 100%;
@@ -1359,6 +1357,13 @@ body {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat
+}
+
+.container-contact {
+    flex: 1;
+    align-items: center;
+    /* Centers content vertically */
+    justify-content: center;
 }
 
 .contact--lockup {
@@ -1882,4 +1887,152 @@ body {
 
 .herodiv {
     margin: 7px;
+}
+
+:root {
+    --color-text: #616161;
+    --color-text-btn: #ffffff;
+    --card1-gradient-color1: #303030;
+    --card1-gradient-color2: #818080;
+    --card2-gradient-color1: #0077AF;
+    --card2-gradient-color2: #afdef3;
+    --card3-gradient-color1: #A534AA;
+    --card3-gradient-color2: #F09715;
+    --card4-gradient-color1: #003ece;
+    --card4-gradient-color2: #b7c7ee;
+    --card5-gradient-color1: #EC7C23;
+    --card5-gradient-color2: #B6B5B5;
+}
+
+@media (max-width: 375px) {
+    .card-wrap {
+        max-width: 58px;
+        max-height: 212px;
+    }
+
+    .card-header img {
+        max-width: 5px;
+        display: flex;
+
+    }
+}
+
+.body-contact {
+    display: flex;
+    flex-wrap: wrap;
+    font-family: 'Roboto', sans-serif;
+    height: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (min-width: 820px) and (min-height:1180px) {
+    .body-contact {
+        padding-top: 200px;
+    }
+}
+
+.card-wrap {
+    width: 170px;
+    height: 212px;
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.42);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6.5px);
+    -webkit-backdrop-filter: blur(6.5px);
+    border: 2px solid rgba(255, 255, 255, 0.486);
+    overflow: hidden;
+    color: var(--color-text);
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+        rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+.card-wrap:hover {
+    transform: scale(1.1);
+}
+
+.card-header {
+    height: 200px;
+    width: 100%;
+    background: red;
+    border-radius: 100% 0% 100% 0% / 0% 50% 50% 100%;
+    display: grid;
+    place-items: center;
+
+}
+
+.card-header i {
+    color: #fff;
+    font-size: 72px;
+    border-radius: 0%;
+}
+
+.card-text {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.card-header.one {
+    background: linear-gradient(to bottom left, var(--card1-gradient-color1), var(--card1-gradient-color2));
+}
+
+.card-header.two {
+    background: linear-gradient(to bottom left, var(--card2-gradient-color1), var(--card2-gradient-color2));
+}
+
+.card-header.three {
+    background: linear-gradient(to bottom left, var(--card3-gradient-color1), var(--card3-gradient-color2));
+}
+
+.card-header.four {
+    background: linear-gradient(to bottom left, var(--card4-gradient-color1), var(--card4-gradient-color2));
+}
+
+.card-header.five {
+    background: linear-gradient(to bottom left, var(--card5-gradient-color1), var(--card5-gradient-color2));
+}
+
+.card-header img {
+    max-width: 76px;
+}
+
+.contact-title h2 {
+    margin: 100px 0 20px 0;
+    font-size: 30px;
+    text-align: center
+}
+
+.attribution {
+    margin-top: auto;
+    font-size: 15px;
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+.attribution a {
+    color: white;
+}
+
+@media only screen and (min-width: 390px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}
+
+@media only screen and (min-height: 932px) {
+    .hide-on-small-height {
+        display: none;
+    }
 }
