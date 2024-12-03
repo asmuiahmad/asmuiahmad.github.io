@@ -1,4 +1,4 @@
-@font-face {
+g@font-face {
     font-family: 'Montserrat';
     src: url("fonts/Montserrat-Black.eot");
     src: local("☺"), url("fonts/Montserrat-Black.woff") format("woff"), url("fonts/Montserrat-Black.ttf") format("truetype"), url("fonts/Montserrat-Black.svg") format("svg");
@@ -935,6 +935,10 @@ intro--options h3 {
 
     .intro--banner {
         height: 320px;
+    }
+
+    .intro--banner img {
+        display: none;
     }
 
     .intro--options {
