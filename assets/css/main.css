@@ -1911,6 +1911,27 @@ intro--options h3 {
     }
 }
 
+@media (max-width: 320px) {
+    .intro--banner::before {
+        width: 290px;
+        top: 290px;
+    }
+
+    .intro--options {
+        width: 310px;
+    }
+
+    .intro--banner {
+        height: 310px;
+    }
+
+    .intro--options {
+        padding-top: 0;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+}
+
 .perspective {
     position: relative;
     width: 100%;
