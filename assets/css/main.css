@@ -1435,7 +1435,7 @@ intro--options h3 {
 
 .about--options>a {
     display: flex;
-    grap: 5px;
+    gap: 5px;
     position: relative;
     width: 150px;
     height: 75px;
@@ -1854,10 +1854,6 @@ intro--options h3 {
     }
 }
 
-@media (max-width: 600px) {
-
-}
-
 @media (max-width: 600px) and (max-width: 415px) {
     .life-request--options {
         -webkit-box-pack: justify;
@@ -1898,6 +1894,21 @@ intro--options h3 {
         display: none;
     }
     
+}
+
+@media (max-width: 360px) {
+    .intro--banner::before {
+        width: 320px;
+        top: 290px;
+    }
+
+    .intro--options {
+        width: 340px;
+    }
+
+    .intro--banner {
+        height: 310px;
+    }
 }
 
 .perspective {
