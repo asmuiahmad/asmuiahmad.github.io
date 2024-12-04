@@ -1,4 +1,4 @@
-g@font-face {
+@font-face {
     font-family: 'Montserrat';
     src: url("fonts/Montserrat-Black.eot");
     src: local("☺"), url("fonts/Montserrat-Black.woff") format("woff"), url("fonts/Montserrat-Black.ttf") format("truetype"), url("fonts/Montserrat-Black.svg") format("svg");
@@ -549,35 +549,116 @@ body {
     width: 30px;
 }
 
-.header--cta {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    padding: 0 20px;
-    line-height: 30px;
+.btn-contact-me a {
+    position: relative;
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 10px 0;
+    color: #ffffff;
     text-decoration: none;
-    color: #fff;
-    font-weight: 700;
     text-transform: uppercase;
-    background-color: #0f33ff;
-    border: none;
-    opacity: 0;
-    visibility: hidden;
-    -webkit-transition: opacity .4s ease-in-out, visibility 0s .4s;
-    transition: opacity .4s ease-in-out, visibility 0s .4s
+    transition: 0.5s;
+    letter-spacing: 4px;
+    overflow: hidden;
+    margin-right: 50px;
 }
 
-.header--cta:focus {
-    outline: none
+.btn-contact-me a:hover {
+    background: #0F33FF;
+    color: #ffffff;
+    box-shadow: 0 0 5px #0F33FF,
+        0 0 25px #0F33FF,
+        0 0 50px #0F33FF,
+        0 0 200px #0F33FF;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
 }
 
-.header--cta.is-active {
-    opacity: 1;
-    visibility: visible;
-    -webkit-transition: opacity .4s ease-in-out .4s;
-    transition: opacity .4s ease-in-out .4s
+.btn-contact-me a span {
+    position: absolute;
+    display: block;
+}
+
+.btn-contact-me a span:nth-child(1) {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #0F33FF);
+    animation: animate1 1s linear infinite;
+}
+
+@keyframes animate1 {
+    0% {
+        left: -100%;
+    }
+
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+.btn-contact-me a span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #0F33FF);
+    animation: animate2 1s linear infinite;
+    animation-delay: 0.25s;
+}
+
+@keyframes animate2 {
+    0% {
+        top: -100%;
+    }
+
+    50%,
+    100% {
+        top: 100%;
+    }
+}
+
+.btn-contact-me a span:nth-child(3) {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #0F33FF);
+    animation: animate3 1s linear infinite;
+    animation-delay: 0.50s;
+}
+
+@keyframes animate3 {
+    0% {
+        right: -100%;
+    }
+
+    50%,
+    100% {
+        right: 100%;
+    }
+}
+
+.btn-contact-me a span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #0F33FF);
+    animation: animate4 1s linear infinite;
+    animation-delay: 0.75s;
+}
+
+@keyframes animate4 {
+    0% {
+        bottom: -100%;
+    }
+
+    50%,
+    100% {
+        bottom: 100%;
+    }
 }
 
 @media (max-width: 767px) {
@@ -814,12 +895,14 @@ intro--options h3 {
     font-size: 16px;
     text-transform: uppercase;
     text-align: left;
-    color: #282828; /* Default color */
+    color: #282828;
+    /* Default color */
     transition: color 0.1s ease, text-shadow 0.1s ease;
 }
 
 .intro--options>a:hover h3 {
-    color: #fff; /* White font color */
+    color: #fff;
+    /* White font color */
     text-shadow: 0 0 10px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 60px #fff;
 }
 
@@ -847,7 +930,7 @@ intro--options h3 {
         width: 900px;
     }
 
-.intro--banner::after {
+    .intro--banner::after {
         margin: 0 20px 0 0;
         width: 455px;
     }
@@ -982,110 +1065,6 @@ intro--options h3 {
 
     .intro--options {
         width: 310px;
-    }
-}
-
-.btn-contact-me a{
-    position: relative;
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 10px 0;
-    color: #ffffff;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: 0.5s;
-    letter-spacing: 4px;
-    overflow: hidden;
-    margin-right: 50px;
-}
-
-.btn-contact-me a:hover{
-    background: #0F33FF;
-    color: #ffffff;
-    box-shadow: 0 0 5px #0F33FF,
-                0 0 25px #0F33FF,
-                0 0 50px #0F33FF,
-                0 0 200px #0F33FF;
-    -webkit-box-reflect:below 1px linear-gradient(transparent, #0005);
-}
-
-.btn-contact-me a span{
-    position: absolute;
-    display: block;
-}
-
-.btn-contact-me a span:nth-child(1){
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg,transparent,#0F33FF);
-    animation: animate1 1s linear infinite;
-}
-
-@keyframes animate1{
-    0%{
-        left: -100%;
-    }
-    50%,100%{
-        left: 100%;
-    }
-}
-
-.btn-contact-me a span:nth-child(2){
-    top: -100%;
-    right: 0;
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(180deg,transparent,#0F33FF);
-    animation: animate2 1s linear infinite;
-    animation-delay: 0.25s;
-}
-
-@keyframes animate2{
-    0%{
-        top: -100%;
-    }
-    50%,100%{
-        top: 100%;
-    }
-}
-
-.btn-contact-me a span:nth-child(3){
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(270deg,transparent,#0F33FF);
-    animation: animate3 1s linear infinite;
-    animation-delay: 0.50s;
-}
-
-@keyframes animate3{
-    0%{
-        right: -100%;
-    }
-    50%,100%{
-        right: 100%;
-    }
-}
-
-.btn-contact-me a span:nth-child(4){
-    bottom: -100%;
-    left: 0;
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(360deg,transparent,#0F33FF);
-    animation: animate4 1s linear infinite;
-    animation-delay: 0.75s;
-}
-
-@keyframes animate4{
-    0%{
-        bottom: -100%;
-    }
-    50%,100%{
-        bottom: 100%;
     }
 }
 
@@ -1893,7 +1872,7 @@ intro--options h3 {
     .intro--banner::after {
         display: none;
     }
-    
+
 }
 
 @media (max-width: 360px) {
@@ -2054,9 +2033,11 @@ intro--options h3 {
     0% {
         text-shadow: 0 0 20px #0f33ff, 0 0 40px #0f33ff, 0 0 60px #0f33ff, 0 0 80px #0f33ff;
     }
+
     50% {
         text-shadow: 0 0 25px #0f33ff, 0 0 50px #0f33ff, 0 0 75px #0f33ff, 0 0 100px #0f33ff;
     }
+
     100% {
         text-shadow: 0 0 20px #0f33ff, 0 0 40px #0f33ff, 0 0 60px #0f33ff, 0 0 80px #0f33ff;
     }
