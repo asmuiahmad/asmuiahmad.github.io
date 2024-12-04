@@ -820,7 +820,7 @@ intro--options h3 {
 
 .intro--options>a:hover h3 {
     color: #fff; /* White font color */
-    text-shadow: 0 0 10px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 60px #fff; /* White neon glow */
+    text-shadow: 0 0 10px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 60px #fff;
 }
 
 .intro--options p {
@@ -907,7 +907,6 @@ intro--options h3 {
     }
 }
 
-
 @media (max-width: 600px) and (max-height: 750px) {
     .intro--banner {
         height: auto
@@ -981,8 +980,6 @@ intro--options h3 {
         width: 310px;
     }
 }
-
-
 
 .btn-contact-me a{
     position: relative;
@@ -1888,6 +1885,17 @@ intro--options h3 {
     }
 }
 
+@media (max-width: 425px) {
+    .intro--banner img {
+        display: none;
+    }
+
+    .intro--banner::after {
+        display: none;
+    }
+    
+}
+
 .perspective {
     position: relative;
     width: 100%;
@@ -1935,10 +1943,8 @@ intro--options h3 {
 .effect-rotate-left--animate .container {
     -webkit-transform: translateZ(-1800px) translateX(-50%) rotateY(45deg);
     transform: translateZ(-1800px) translateX(-50%) rotateY(45deg);
-    outline: 30px solid #0f33ff; /* Primary outline color */
-    border-radius: 5px; /* Rounded corners */
-
-    /* Enhanced neon glow effect */
+    outline: 30px solid #0f33ff;
+    border-radius: 5px;
     box-shadow: 0 0 30px #0f33ff, 0 0 60px #0f33ff, 0 0 90px #0f33ff, 0 0 2000px #0f33ff;
 }
 
@@ -2231,9 +2237,7 @@ intro--options h3 {
 
 .contact--card {
     position: relative;
-    /* Positioned relative to the .contact container */
     flex: 1;
-    /* Allows it to take up the remaining space */
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -2242,26 +2246,19 @@ intro--options h3 {
     width: 960px;
     max-width: 80%;
     margin: 50px auto 0;
-    /* Center it and add space at the top */
     gap: 10px;
 }
 
 .contact--attribution {
     position: absolute;
-    /* Fixed position at the bottom */
     bottom: 10px;
-    /* 10px from the bottom of the screen */
     left: 50%;
-    /* Center horizontally */
     transform: translateX(-50%);
-    /* Center the element */
     font-size: 15px;
     text-align: center;
     color: #666;
     padding: 20px;
     z-index: 5;
-    /* Ensure it is visible */
-
 }
 
 .attribution a {
