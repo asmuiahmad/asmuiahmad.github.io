@@ -269,21 +269,22 @@
 }
 
 @media (max-width: 600px) and (max-height: 750px) {
-    .intro--banner {
-        height: auto
-    }
-
-    .intro--banner::before,
-    .intro--banner::after {
-        display: none
-    }
-
     .intro--banner h1 {
         margin-top: 0
     }
 
     .intro--options {
-        display: none
+        width: 380px;
+    }
+
+    .intro--banner img {
+        display: none;
+    }
+
+    .about--banner::before {
+        top: 235px;
+        left: 0;
+        width: 520px;
     }
 }
 
@@ -364,11 +365,11 @@
 
     .intro--banner::before,
     .intro--banner::after {
-        display: none
+        display: none;
     }
 
     .intro--banner h1 {
-        margin-top: 0
+        margin-top: 0;
     }
 
     .intro--options {
