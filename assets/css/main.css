@@ -877,7 +877,8 @@ intro--options h3 {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-    margin: 0 auto
+    margin: 0 auto;
+    top: -30px;
 }
 
 .life h2 {
@@ -1037,7 +1038,8 @@ intro--options h3 {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-    margin: 0 auto
+    margin: 0 auto;
+    top: -30px;
 }
 
 .about--banner {
@@ -1755,7 +1757,7 @@ intro--options h3 {
     background-image: url("../img/sand-black.jpg");
     background-position: center;
     background-size: cover;
-    background-repeat: no-repeat
+    background-repeat: no-repeat;
 }
 
 .contact--title h2 {
