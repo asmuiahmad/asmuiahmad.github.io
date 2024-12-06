@@ -34,6 +34,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
 * {
     margin: 0px;
     padding: 0px;
@@ -842,13 +844,11 @@ intro--options h3 {
     text-transform: uppercase;
     text-align: left;
     color: #282828;
-    /* Default color */
     transition: color 0.1s ease, text-shadow 0.1s ease;
 }
 
 .intro--options>a:hover h3 {
     color: #fff;
-    /* White font color */
     text-shadow: 0 0 10px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 60px #fff;
 }
 
@@ -1673,7 +1673,6 @@ intro--options h3 {
 .card-wrap {
     width: 170px;
     height: 212px;
-    /* From https://css.glass */
     background: rgba(255, 255, 255, 0.42);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -1715,24 +1714,28 @@ intro--options h3 {
     margin-bottom: 20px;
 }
 
-.card-header.one {
-    background: linear-gradient(to bottom left, var(--card1-gradient-color1), var(--card1-gradient-color2));
+.card-header {
+    background: linear-gradient(to bottom left, var(--gradient-color1), var(--gradient-color2));
 }
 
-.card-header.two {
-    background: linear-gradient(to bottom left, var(--card2-gradient-color1), var(--card2-gradient-color2));
+.github-header {
+    --gradient-color1: #6e5494;
+    --gradient-color2: #333;
 }
 
-.card-header.three {
-    background: linear-gradient(to bottom left, var(--card3-gradient-color1), var(--card3-gradient-color2));
+.linkedin-header {
+    --gradient-color1: #0077b5;
+    --gradient-color2: #005582;
 }
 
-.card-header.four {
-    background: linear-gradient(to bottom left, var(--card4-gradient-color1), var(--card4-gradient-color2));
+.instagram-header {
+    --gradient-color1: #f09433;
+    --gradient-color2: #bc1888;
 }
 
-.card-header.five {
-    background: linear-gradient(to bottom left, var(--card5-gradient-color1), var(--card5-gradient-color2));
+.email-header {
+    --gradient-color1: #7e8de7;
+    --gradient-color2: #3121c2;
 }
 
 .card-header img {
@@ -1768,10 +1771,14 @@ intro--options h3 {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 960px;
+    width: 900px;
     max-width: 80%;
     margin: 50px auto 0;
-    gap: 10px;
+    gap: 30px;
+}
+
+.contact--card-mobile {
+    display: none;
 }
 
 .contact--attribution {
