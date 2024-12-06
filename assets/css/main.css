@@ -728,7 +728,7 @@ body {
     -ms-flex-pack: center;
     justify-content: center;
     margin: 0 auto;
-    top: -25px;
+    top: -10px;
 }
 
 .intro--banner {
@@ -878,7 +878,7 @@ intro--options h3 {
     -ms-flex-pack: center;
     justify-content: center;
     margin: 0 auto;
-    top: -30px;
+    top: -10px;
 }
 
 .life h2 {
@@ -1039,7 +1039,7 @@ intro--options h3 {
     -ms-flex-pack: center;
     justify-content: center;
     margin: 0 auto;
-    top: -30px;
+    top: -20px;
 }
 
 .about--banner {
