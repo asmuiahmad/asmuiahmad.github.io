@@ -409,7 +409,7 @@
     .life-request--options label {
         width: 150px;
         margin-bottom: 15px;
-        font-size: 14px
+        font-size: 14px;
     }
 
     .life-request--options input[type="checkbox"]:checked+label svg {
@@ -504,8 +504,8 @@
     }
 
     .intro--options>a {
-        font-size: 11px;
         width: 390px;
+        font-size: 11px;
     }
 
     .intro--banner::after {
