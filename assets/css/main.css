@@ -1160,15 +1160,15 @@ intro--options h3 {
 }
 
 .about--options>a:nth-child(1) {
-    background-image: url("../img/about-projects.jpg")
+    background-image: url("../img/about-img/about-projects.jpg")
 }
 
 .about--options>a:nth-child(2) {
-    background-image: url("../img/about-philosophy.jpg")
+    background-image: url("../img/about-img/about-philosophy.jpg")
 }
 
 .about--options>a:nth-child(3) {
-    background-image: url("../img/about-history.jpg")
+    background-image: url("../img/about-img/about-history.jpg")
 }
 
 .about--options>a:hover h3 {
@@ -1754,7 +1754,7 @@ intro--options h3 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("../img/sand-black.jpg");
+    background-image: url("../img/html-img/sand-black.jpg");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1774,10 +1774,19 @@ intro--options h3 {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 900px;
+    width: 850px;
     max-width: 80%;
     margin: 50px auto 0;
     gap: 30px;
+}
+
+.contact-title {
+    font-size: 2rem; /* Adjusts the size of the h2 */
+    color: #333; /* Sets the color */
+    margin-bottom: 20px; /* Adds spacing between title and cards */
+    position: relative; /* Keeps it relative to the flow */
+    justify-content: center;
+    z-index: 1; /* Ensures it's above any background content */
 }
 
 .contact--card-mobile {
