@@ -550,8 +550,8 @@
 
 @media (max-width: 390px) {
     .card-wrap {
-        max-width: 58px;
-        max-height: 212px;
+        max-width: 40px;
+        max-height: 180px;
     }
 
     .card-header img {
