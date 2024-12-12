@@ -72,6 +72,7 @@ main,
 menu,
 nav,
 section,
+
 summary {
     display: block
 }
@@ -1062,7 +1063,7 @@ intro--options h3 {
     bottom: 56px;
     position: absolute;
     right: 45px;
-    width: 430px;
+    width: 500px;
     height: 4px;
     background-color: #0f33ff;
     box-shadow: 0 0 10px #0f33ff, 0 0 20px #0f33ff, 0 0 30px #0f33ff, 0 0 40px #0f33ff;
