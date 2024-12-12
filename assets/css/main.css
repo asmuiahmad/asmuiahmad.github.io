@@ -1062,8 +1062,8 @@ intro--options h3 {
     content: "";
     bottom: 56px;
     position: absolute;
-    right: 45px;
-    width: 500px;
+    right: 30px;
+    width: 430px;
     height: 4px;
     background-color: #0f33ff;
     box-shadow: 0 0 10px #0f33ff, 0 0 20px #0f33ff, 0 0 30px #0f33ff, 0 0 40px #0f33ff;
@@ -1072,7 +1072,7 @@ intro--options h3 {
 
 .about--banner h2 {
     position: relative;
-    margin-top: 100px;
+    margin-top: 75px;
     font-size: 68px;
     font-weight: 900;
     line-height: 1;
