@@ -692,12 +692,6 @@ body {
     content: "05"
 }
 
-.side-nav li.is-active {
-    color: #0f33ff;
-    -webkit-transition: color .4s ease-in-out;
-    transition: color .4s ease-in-out
-}
-
 .side-nav li.is-active span {
     opacity: 1;
     visibility: visible;
