@@ -15,6 +15,8 @@
 </head>
 
   <body>
+    <!-- Soundwave Background -->
+    <canvas id="soundwave-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;"></canvas>
     <!-- notification for small viewports and landscape oriented smartphones -->
     <div class="perspective effect-rotate-left">
       <div class="container">
@@ -82,9 +84,9 @@
                       <h3>Machine</h3>
                       <p>Crafting wonders, day and night,
                         Blueprints glow with mystic light.
-                        Wizard’s flair, a daring hand,
+                        Wizard's flair, a daring hand,
                         Dreams arise where visions stand.
-                        Innovation’s spark, beyond compare,
+                        Innovation's spark, beyond compare,
                         Building worlds from thought and air.
                       </p>
                     </a>
@@ -94,7 +96,7 @@
                         A sound that dances through day and night.
                         Beautiful eyes reflect the skies,
                         A timeless song, gentle and true,
-                        Nature’s symphony. We will kiss till the World dies.
+                        Nature's symphony. We will kiss till the World dies.
                       </p>
                     </a>
                   </div>
@@ -280,6 +282,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="assets/js/functions-min.js"></script>
     <script src="assets/js/typed.js"></script>
+    <script>
+      // Soundwave animation background
+      const canvas = document.getElementById('soundwave-bg');
+      const ctx = canvas.getContext('2d');
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      // Soundwave parameters
+      const waves = [
+        { amplitude: 40, frequency: 0.015, speed: 0.015, color: 'rgba(0,180,255,0.5)', offset: 0 },
+        { amplitude: 25, frequency: 0.022, speed: 0.018, color: 'rgba(0,120,255,0.3)', offset: 100 },
+        { amplitude: 15, frequency: 0.03, speed: 0.022, color: 'rgba(0,60,255,0.2)', offset: 200 }
+      ];
+      function drawWaves(time) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        waves.forEach(wave => {
+          ctx.beginPath();
+          for (let x = 0; x <= canvas.width; x += 2) {
+            const y = canvas.height/2 + Math.sin(x * wave.frequency + time * wave.speed + wave.offset) * wave.amplitude;
+            ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = wave.color;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        });
+        requestAnimationFrame(drawWaves);
+      }
+      requestAnimationFrame(drawWaves);
+    </script>
 
   </body>
 </html>

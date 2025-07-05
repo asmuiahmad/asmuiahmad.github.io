@@ -1466,12 +1466,10 @@ intro--options h3 {
     -webkit-transform: translateZ(0) translateX(0) rotateY(0deg);
     transform: translateZ(0) translateX(0) rotateY(0deg);
     min-height: 100%;
-    outline: 50px solid #0f33ff;
     -webkit-transition: -webkit-transform .4s;
     transition: -webkit-transform .4s;
     transition: transform .4s;
     transition: transform .4s, -webkit-transform .4s;
-    border-radius: 5px;
 }
 
 .modalview .container {
@@ -1489,15 +1487,12 @@ intro--options h3 {
     -webkit-transition: -webkit-transform .4s;
     transition: -webkit-transform .4s;
     transition: transform .4s;
-    transition: transform .4s, -webkit-transform .4s
+    transition: transform .4s, -webkit-transform .4s;
 }
 
 .effect-rotate-left--animate .container {
     -webkit-transform: translateZ(-1800px) translateX(-50%) rotateY(45deg);
     transform: translateZ(-1800px) translateX(-50%) rotateY(45deg);
-    outline: 30px solid #0f33ff;
-    border-radius: 5px;
-    box-shadow: 0 0 30px #0f33ff, 0 0 60px #0f33ff, 0 0 90px #0f33ff, 0 0 2000px #0f33ff;
 }
 
 .outer-nav {
