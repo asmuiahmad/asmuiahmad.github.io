@@ -68,17 +68,28 @@ progress.addEventListener('input', () => {
   }
 });
 
+let autoCollapseTimeout = null;
+function setAutoCollapse() {
+  if (autoCollapseTimeout) clearTimeout(autoCollapseTimeout);
+  autoCollapseTimeout = setTimeout(() => {
+    if (!popup.classList.contains('collapsed')) {
+      popup.classList.add('collapsed');
+      chevron.style.transform = 'rotate(180deg)';
+    }
+  }, 30000); // 30 seconds
+}
 expandBtn.addEventListener('click', () => {
   const isCollapsed = popup.classList.toggle('collapsed');
   if (isCollapsed) {
     expandBtn.title = 'Expand';
-    chevron.style.transform = 'rotate(180deg)'; // right
+    chevron.style.transform = 'rotate(180deg)';
+    if (autoCollapseTimeout) clearTimeout(autoCollapseTimeout);
   } else {
     expandBtn.title = 'Collapse';
-    chevron.style.transform = 'rotate(0deg)'; // left
+    chevron.style.transform = 'rotate(0deg)';
+    setAutoCollapse();
   }
 });
-
 // On load, ensure chevron is correct and player is collapsed
 chevron.style.transform = 'rotate(180deg)';
 popup.classList.add('collapsed');
