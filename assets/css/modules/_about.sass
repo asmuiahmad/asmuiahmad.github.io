@@ -100,11 +100,27 @@
       height: 75px
       text-decoration: none
       color: $white
-      border: 10px solid $highlight
+      border: 3px solid transparent
+      border-radius: 18px
       background:
         position: center
         size: cover
         repeat: no-repeat
+      box-shadow: 0 0 16px 2px #00ffe7, 0 0 24px 4px #3a8bfd
+      background-clip: padding-box
+      z-index: 1
+      &::before
+        content: ""
+        position: absolute
+        top: -3px
+        left: -3px
+        right: -3px
+        bottom: -3px
+        border-radius: 20px
+        z-index: -1
+        pointer-events: none
+        background: linear-gradient(120deg, #00ffe7 0%, #3a8bfd 60%, #ffe259 100%)
+        opacity: 0.85
 
       &:nth-child(1)
         background-image: url("../img/about-winners.jpg")
