@@ -1,113 +1,84 @@
-// Music Player Logic
-const playlist = [
-  {
-    title: 'Moon - Crystals (Hotline Miami OST)',
-    src: 'assets/audio/Crystals - Hotline Miami Soundtrack.mp3'
-  }
-];
-let currentTrack = 0;
-const audio = document.getElementById('music-audio');
-const playBtn = document.getElementById('music-play');
-const prevBtn = document.getElementById('music-prev');
-const nextBtn = document.getElementById('music-next');
-const progress = document.getElementById('music-progress');
-const title = document.getElementById('music-title');
-const popup = document.getElementById('music-player-popup');
-const expandBtn = document.getElementById('music-player-expand');
-const chevron = document.getElementById('music-chevron');
+// Glassmorphism Music Player with Real-time Visualizer
+const audio = document.getElementById('hero-audio');
+const musicBtn = document.getElementById('music-toggle-btn');
+const visualizerBars = document.querySelectorAll('.music-visualizer .bar');
 
-function loadTrack(idx) {
-  audio.src = playlist[idx].src;
-  title.textContent = playlist[idx].title;
-  progress.value = 0;
+// Audio Context for Visualizer
+let audioCtx, analyser, source, dataArray;
+
+function initAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048; // Much higher for more detail
+    analyser.smoothingTimeConstant = 0.6; // Less smoothing for more responsiveness
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }
 }
 
-function playTrack() {
-  audio.play();
-  playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+// Update visualizer bars based on audio frequency
+function updateVisualizer() {
+  if (!analyser) return;
+  
+  analyser.getByteFrequencyData(dataArray);
+  
+  // Map frequency data to 5 bars
+  visualizerBars.forEach((bar, index) => {
+    const dataIndex = Math.floor((index / visualizerBars.length) * dataArray.length);
+    const value = dataArray[dataIndex];
+    const height = Math.max(8, (value / 255) * 35); // Min 8px, max 35px
+    bar.style.height = `${height}px`;
+  });
+  
+  if (musicBtn.classList.contains('playing')) {
+    requestAnimationFrame(updateVisualizer);
+  }
 }
 
-function pauseTrack() {
-  audio.pause();
-  playBtn.innerHTML = '<i class="fas fa-play"></i>';
-}
-
-playBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    playTrack();
-  } else {
-    pauseTrack();
-  }
-});
-
-prevBtn.addEventListener('click', () => {
-  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
-  loadTrack(currentTrack);
-  playTrack();
-});
-
-nextBtn.addEventListener('click', () => {
-  currentTrack = (currentTrack + 1) % playlist.length;
-  loadTrack(currentTrack);
-  playTrack();
-});
-
-audio.addEventListener('ended', () => {
-  nextBtn.click();
-});
-
-audio.addEventListener('timeupdate', () => {
-  if (audio.duration) {
-    progress.value = (audio.currentTime / audio.duration) * 100;
-  }
-});
-
-progress.addEventListener('input', () => {
-  if (audio.duration) {
-    audio.currentTime = (progress.value / 100) * audio.duration;
-  }
-});
-
-let autoCollapseTimeout = null;
-function setAutoCollapse() {
-  if (autoCollapseTimeout) clearTimeout(autoCollapseTimeout);
-  autoCollapseTimeout = setTimeout(() => {
-    if (!popup.classList.contains('collapsed')) {
-      popup.classList.add('collapsed');
-      chevron.style.transform = 'rotate(180deg)';
+// Play/Pause Toggle
+if (musicBtn && audio) {
+  musicBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      // Initialize audio context on first interaction
+      initAudioContext();
+      
+      audio.play();
+      musicBtn.classList.add('playing');
+      musicBtn.title = 'Pause Music';
+      
+      // Start visualizer
+      updateVisualizer();
+      startBackgroundVisualizer();
+    } else {
+      audio.pause();
+      musicBtn.classList.remove('playing');
+      musicBtn.title = 'Play Music';
+      
+      // Stop background visualizer
+      stopBackgroundVisualizer();
     }
-  }, 30000); // 30 seconds
-}
-expandBtn.addEventListener('click', () => {
-  const isCollapsed = popup.classList.toggle('collapsed');
-  if (isCollapsed) {
-    expandBtn.title = 'Expand';
-    chevron.style.transform = 'rotate(180deg)';
-    if (autoCollapseTimeout) clearTimeout(autoCollapseTimeout);
-  } else {
-    expandBtn.title = 'Collapse';
-    chevron.style.transform = 'rotate(0deg)';
-    setAutoCollapse();
-  }
-});
-// On load, ensure chevron is correct and player is collapsed
-chevron.style.transform = 'rotate(180deg)';
-popup.classList.add('collapsed');
-// Remove the close (X) button from the DOM
-const closeBtn = document.getElementById('music-player-close');
-if (closeBtn) closeBtn.remove();
+  });
 
-// Music Visualizer
-const musicAudio = document.getElementById('music-audio');
+  // Handle audio end
+  audio.addEventListener('ended', () => {
+    musicBtn.classList.remove('playing');
+    musicBtn.title = 'Play Music';
+    stopBackgroundVisualizer();
+  });
+}
+
+// Background Visualizer (Canvas)
 const soundwaveCanvas = document.getElementById('soundwave-bg');
 const soundwaveCtx = soundwaveCanvas.getContext('2d');
-let audioCtx, analyser, source, dataArray, animationId, isVisualizerActive = false;
+let bgAnalyser, bgDataArray, bgAnimationId, isVisualizerActive = false;
 
-// Neon Sine Wave Animation
+// Neon Sine Wave Animation (Default)
 let neonWaveAnimId = null;
 function drawNeonWave(time) {
   soundwaveCtx.clearRect(0, 0, soundwaveCanvas.width, soundwaveCanvas.height);
-  // Neon gradient
   const grad = soundwaveCtx.createLinearGradient(0, soundwaveCanvas.height/2, soundwaveCanvas.width, soundwaveCanvas.height/2);
   grad.addColorStop(0, '#00ffe7');
   grad.addColorStop(0.6, '#3a8bfd');
@@ -131,66 +102,67 @@ function drawNeonWave(time) {
   soundwaveCtx.restore();
   neonWaveAnimId = requestAnimationFrame(drawNeonWave);
 }
-// Start the neon wave by default
 requestAnimationFrame(drawNeonWave);
 
-function startVisualizer() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    source = audioCtx.createMediaElementSource(musicAudio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-  }
+// Audio Visualizer (When Playing)
+function startBackgroundVisualizer() {
+  if (!analyser) return;
+  
+  bgAnalyser = analyser;
+  bgDataArray = new Uint8Array(bgAnalyser.frequencyBinCount);
   isVisualizerActive = true;
   cancelAnimationFrame(neonWaveAnimId);
-  drawVisualizer();
+  drawBackgroundVisualizer();
 }
-function stopVisualizer() {
+
+function stopBackgroundVisualizer() {
   isVisualizerActive = false;
-  if (animationId) cancelAnimationFrame(animationId);
+  if (bgAnimationId) cancelAnimationFrame(bgAnimationId);
   requestAnimationFrame(drawNeonWave);
 }
 
-function drawVisualizer() {
+function drawBackgroundVisualizer() {
   soundwaveCtx.clearRect(0, 0, soundwaveCanvas.width, soundwaveCanvas.height);
-  analyser.getByteTimeDomainData(dataArray);
+  bgAnalyser.getByteTimeDomainData(bgDataArray);
+  
   soundwaveCtx.save();
-  // Create gradient for the line
+  
+  // Create gradient for the waveform
   const grad = soundwaveCtx.createLinearGradient(0, 0, soundwaveCanvas.width, 0);
   grad.addColorStop(0, '#3a8bfd');
-  grad.addColorStop(0.7, '#6a5cff');
-  grad.addColorStop(1, '#a259ff');
+  grad.addColorStop(0.3, '#6a5cff');
+  grad.addColorStop(0.7, '#a259ff');
+  grad.addColorStop(1, '#ec4899');
+  
   soundwaveCtx.strokeStyle = grad;
-  soundwaveCtx.lineWidth = 4;
+  soundwaveCtx.lineWidth = 3;
   soundwaveCtx.shadowColor = '#3a8bfd';
-  soundwaveCtx.shadowBlur = 16;
+  soundwaveCtx.shadowBlur = 20;
+  soundwaveCtx.lineCap = 'round';
+  soundwaveCtx.lineJoin = 'round';
+  
   soundwaveCtx.beginPath();
-  for (let i = 0; i < dataArray.length; i++) {
-    const x = (i / (dataArray.length - 1)) * soundwaveCanvas.width;
-    const v = dataArray[i] / 255;
-    const y = soundwaveCanvas.height * v;
+  
+  const sliceWidth = soundwaveCanvas.width / bgDataArray.length;
+  let x = 0;
+  
+  for (let i = 0; i < bgDataArray.length; i++) {
+    const v = bgDataArray[i] / 128.0; // Normalize to 0-2
+    const y = (v * soundwaveCanvas.height) / 2;
+    
     if (i === 0) {
       soundwaveCtx.moveTo(x, y);
     } else {
       soundwaveCtx.lineTo(x, y);
     }
+    
+    x += sliceWidth;
   }
+  
   soundwaveCtx.stroke();
   soundwaveCtx.restore();
+  
   if (isVisualizerActive) {
-    animationId = requestAnimationFrame(drawVisualizer);
+    bgAnimationId = requestAnimationFrame(drawBackgroundVisualizer);
   }
 }
-
-musicAudio.addEventListener('play', () => {
-  startVisualizer();
-});
-musicAudio.addEventListener('pause', () => {
-  stopVisualizer();
-});
-musicAudio.addEventListener('ended', () => {
-  stopVisualizer();
-}); 

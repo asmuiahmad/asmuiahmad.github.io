@@ -1,0 +1,19 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "description": "Personal Portfolio Website with Music Player",
+  "scripts": {
+    "start": "live-server --port=8080 --open=index.html",
+    "dev": "live-server --port=8080 --open=index.html --watch=assets,index.html"
+  },
+  "keywords": [
+    "portfolio",
+    "website",
+    "music-player"
+  ],
+  "author": "Ahmad Asmu'i",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

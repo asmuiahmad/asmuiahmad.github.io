@@ -277,6 +277,21 @@
       </ul>
     </div>
 
+    <!-- Music Button with Glassmorphism & Visualizer -->
+    <audio id="hero-audio" loop>
+      <source src="assets/audio/Crystals - Hotline Miami Soundtrack.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-toggle-btn" class="music-hero-btn" title="Play Music">
+      <div class="music-visualizer">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <i class="fas fa-music music-icon"></i>
+    </button>
+
     <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -315,28 +330,6 @@
       requestAnimationFrame(drawWaves);
     </script>
 
-  <!-- Music Player Popup -->
-  <div id="music-player-popup" class="music-player-popup">
-    <button id="music-player-expand" class="music-player-expand-btn" title="Collapse">
-      <svg id="music-chevron" viewBox="0 0 24 24"><polyline points="16 4 8 12 16 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="music-player-header">
-      <span>Music Player</span>
-      <button id="music-player-close" class="music-player-close">&times;</button>
-    </div>
-    <audio id="music-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-    <div class="music-player-controls">
-      <button id="music-prev" title="Previous"><i class="fas fa-backward"></i></button>
-      <button id="music-play" title="Play/Pause"><i class="fas fa-play"></i></button>
-      <button id="music-next" title="Next"><i class="fas fa-forward"></i></button>
-    </div>
-    <div class="music-player-progress">
-      <input type="range" id="music-progress" value="0" min="0" max="100">
-    </div>
-    <div class="music-player-info">
-      <span id="music-title">SoundHelix Song 1</span>
-    </div>
-  </div>
   <link rel="stylesheet" href="assets/css/music-player.css">
   <script src="assets/js/music-player.js"></script>
   </body>
