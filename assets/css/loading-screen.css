@@ -10,6 +10,48 @@
   color: #fff;
   background: radial-gradient(circle at center, rgba(30, 90, 180, 0.1), transparent 55%), #02040a;
   font-family: "Courier New", monospace;
+  animation: site-loader-bg-flicker 0.15s infinite steps(2);
+}
+
+/* Hide main page content until CRT effect completes */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999998;
+  background: #000;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+body.crt-started::before {
+  opacity: 0;
+}
+
+body.crt-complete::before {
+  display: none;
+}
+
+/* Freeze all animations and transitions until ready */
+body:not(.crt-complete) * {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
+
+/* Allow only loading screen animations */
+body:not(.crt-complete) .site-loader,
+body:not(.crt-complete) .site-loader *,
+body:not(.crt-complete) .crt-tv-effect,
+body:not(.crt-complete) .crt-tv-effect * {
+  animation-play-state: running !important;
+}
+
+/* Prevent pointer events on main content during loading */
+body:not(.crt-complete) .perspective,
+body:not(.crt-complete) .container,
+body:not(.crt-complete) .l-viewport {
+  pointer-events: none !important;
+  user-select: none !important;
 }
 
 .site-loader::before {
@@ -19,6 +61,17 @@
   pointer-events: none;
   opacity: 0.35;
   background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px);
+  animation: site-loader-scanlines 8s linear infinite;
+}
+
+.site-loader::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.08;
+  background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+  animation: site-loader-vertical-glitch 0.3s infinite steps(3);
 }
 
 .site-loader__content {
@@ -26,6 +79,68 @@
   z-index: 1;
   width: min(760px, 85vw);
   text-align: center;
+}
+
+/* Terminal console in top-left */
+.site-loader__terminal {
+  position: fixed;
+  top: 25px;
+  left: 25px;
+  z-index: 2;
+  max-width: 450px;
+  color: #00d4ff;
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: left;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.8), 0 0 15px rgba(0, 150, 255, 0.5);
+}
+
+.site-loader__terminal-line {
+  opacity: 0;
+  animation: terminal-line-appear 0.3s ease forwards;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.site-loader__terminal-line--typing {
+  animation: terminal-typing 0.05s steps(1) infinite;
+}
+
+.site-loader__terminal-line .terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 12px;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+  animation: terminal-cursor-blink 0.8s infinite;
+}
+
+.site-loader__terminal-line .terminal-prompt {
+  color: #00d4ff;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.9), 0 0 15px rgba(0, 150, 255, 0.6);
+}
+
+.site-loader__terminal-line .terminal-success {
+  color: #5cc8ff;
+  text-shadow: 0 0 8px rgba(92, 200, 255, 0.8), 0 0 15px rgba(0, 150, 255, 0.5);
+}
+
+.site-loader__terminal-line .terminal-warning {
+  color: #00b8ff;
+  text-shadow: 0 0 8px rgba(0, 184, 255, 0.8), 0 0 15px rgba(0, 150, 255, 0.5);
+}
+
+.site-loader__terminal-line .terminal-info {
+  color: #00e4ff;
+  text-shadow: 0 0 8px rgba(0, 228, 255, 0.8), 0 0 15px rgba(0, 180, 255, 0.5);
+}
+
+.site-loader__terminal-line .terminal-error {
+  color: #0099ff;
+  text-shadow: 0 0 8px rgba(0, 153, 255, 0.8), 0 0 15px rgba(0, 120, 255, 0.5);
 }
 
 .site-loader__label {
@@ -183,13 +298,112 @@
   opacity: 0.25;
   background: linear-gradient(to right, transparent, rgba(100, 180, 255, 0.9), #fff, rgba(100, 180, 255, 0.9), transparent);
   animation: site-loader-line-glitch 2.2s linear infinite;
+  filter: blur(0.5px);
 }
 
-.site-loader__line--one { top: 24%; left: 5%; width: 30%; }
-.site-loader__line--two { top: 72%; right: 8%; width: 18%; animation-delay: 0.8s; }
-.site-loader__line--three { top: 81%; left: 15%; width: 22%; animation-delay: 1.3s; }
+.site-loader__line--one { 
+  top: 24%; 
+  left: 5%; 
+  width: 30%;
+  animation: site-loader-line-glitch 1.8s linear infinite, site-loader-line-flicker 0.25s infinite steps(4);
+}
+
+.site-loader__line--two { 
+  top: 72%; 
+  right: 8%; 
+  width: 18%; 
+  animation: site-loader-line-glitch 1.8s linear infinite 0.8s, site-loader-line-flicker 0.3s infinite steps(3) 0.1s;
+}
+
+.site-loader__line--three { 
+  top: 81%; 
+  left: 15%; 
+  width: 22%; 
+  animation: site-loader-line-glitch 1.8s linear infinite 1.3s, site-loader-line-flicker 0.35s infinite steps(5) 0.2s;
+}
 
 .site-loader.is-finished { animation: site-loader-fade-out 650ms ease forwards; }
+
+/* CRT TV Turn On Effect */
+.crt-tv-effect {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  opacity: 0;
+}
+
+.crt-tv-effect.is-active {
+  opacity: 1;
+}
+
+.crt-tv-effect__screen {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.95) 0%, rgba(224, 224, 224, 0.85) 15%, rgba(136, 136, 136, 0.6) 40%, rgba(0, 0, 0, 0.3) 70%);
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.crt-tv-effect.is-flashing .crt-tv-effect__screen {
+  animation: crt-flash-blend 900ms ease-out forwards;
+}
+
+.crt-tv-effect__line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  transform: translateY(-50%) scaleY(0);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(200, 230, 255, 0.7) 30%, rgba(100, 180, 255, 0.4) 60%, transparent 100%);
+  box-shadow: 0 0 60px 30px rgba(255, 255, 255, 0.6);
+  mix-blend-mode: screen;
+}
+
+.crt-tv-effect.is-collapsing .crt-tv-effect__line {
+  animation: crt-line-collapse-blend 700ms ease-in forwards 350ms;
+}
+
+.crt-tv-effect__scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  opacity: 0;
+  mix-blend-mode: multiply;
+}
+
+.crt-tv-effect.is-active .crt-tv-effect__scanline {
+  opacity: 0.7;
+  animation: crt-scanline-fade 1200ms ease-out forwards;
+}
+
+.crt-tv-effect__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  opacity: 0;
+  mix-blend-mode: multiply;
+}
+
+.crt-tv-effect.is-active .crt-tv-effect__vignette {
+  animation: crt-vignette-fade 1200ms ease-out forwards;
+}
+
+.crt-tv-effect.is-complete {
+  animation: crt-fade-out 400ms ease forwards;
+}
 
 @keyframes site-loader-line-glitch {
   0% { opacity: 0; transform: translateX(-60px); }
@@ -247,10 +461,83 @@
   to { visibility: hidden; pointer-events: none; opacity: 0; }
 }
 
+@keyframes site-loader-bg-flicker {
+  0%, 40%, 60%, 100% { filter: brightness(1) contrast(1); }
+  10%, 50% { filter: brightness(0.92) contrast(1.1); }
+  30%, 70% { filter: brightness(1.05) contrast(0.95); }
+}
+
+@keyframes site-loader-scanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(10px); }
+}
+
+@keyframes site-loader-vertical-glitch {
+  0% { transform: translateY(0) scaleY(1); opacity: 0.08; }
+  33% { transform: translateY(-100vh) scaleY(1.5); opacity: 0.15; }
+  66% { transform: translateY(50vh) scaleY(0.8); opacity: 0.05; }
+  100% { transform: translateY(100vh) scaleY(1.2); opacity: 0.1; }
+}
+
+@keyframes site-loader-line-flicker {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.05; }
+  75% { opacity: 0.4; }
+}
+
+@keyframes crt-flash-blend {
+  0% { opacity: 0; transform: scale(0.01, 1); }
+  8% { opacity: 1; transform: scale(1, 1); }
+  15% { opacity: 0.8; }
+  22% { opacity: 0.95; }
+  30% { opacity: 0.75; }
+  40%, 100% { opacity: 0.5; }
+}
+
+@keyframes crt-line-collapse-blend {
+  0% { transform: translateY(-50%) scaleY(0.002); height: 100vh; opacity: 1; }
+  15% { transform: translateY(-50%) scaleY(0.6); height: 70vh; opacity: 0.95; }
+  50% { transform: translateY(-50%) scaleY(0.15); height: 30vh; opacity: 0.7; }
+  80% { transform: translateY(-50%) scaleY(0.02); height: 8vh; opacity: 0.4; }
+  100% { transform: translateY(-50%) scaleY(0); height: 1px; opacity: 0; }
+}
+
+@keyframes crt-scanline-fade {
+  0% { opacity: 0.7; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+@keyframes crt-vignette-fade {
+  0% { opacity: 0; }
+  30% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+@keyframes crt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes terminal-line-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes terminal-cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
 @media (max-width: 600px) {
   .site-loader__content { width: 82vw; }
   .site-loader__word { min-width: 0; font-size: clamp(40px, 13vw, 72px); }
   .site-loader__progress-area { margin-top: 30px; }
+  
+  /* Hide terminal on mobile */
+  .site-loader__terminal {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

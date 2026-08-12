@@ -170,11 +170,21 @@ const initialiseAudioAnalyser = async () => {
   if (audioContext.state === 'suspended') await audioContext.resume();
 };
 
-if (soundwaveContext) {
-  resizeSoundwaveCanvas();
-  window.addEventListener('resize', resizeSoundwaveCanvas);
-  backgroundMode = 'starting';
-  startIdleWave();
+// Initialize soundwave only after loading is complete
+const initSoundwave = () => {
+  if (soundwaveContext) {
+    resizeSoundwaveCanvas();
+    window.addEventListener('resize', resizeSoundwaveCanvas);
+    backgroundMode = 'starting';
+    startIdleWave();
+  }
+};
+
+// Wait for loading to complete before starting soundwave animation
+if (document.body.classList.contains('crt-complete')) {
+  initSoundwave();
+} else {
+  window.addEventListener('loadingComplete', initSoundwave, { once: true });
 }
 
 if (
