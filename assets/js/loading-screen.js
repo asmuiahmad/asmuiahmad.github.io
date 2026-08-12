@@ -9,7 +9,7 @@
 
   const languages = ['LOADING', '読み込み中', '加载中', 'CARGANDO', 'LADEN', 'CHARGEMENT', 'CARREGANDO', 'تحميل', 'ЗАГРУЗКА', '로딩 중', 'LOADING'];
   const statuses = ['INITIALIZING...', 'CONNECTING...', 'LOADING DATA...', 'VERIFYING...', 'PREPARING INTERFACE...', 'ALMOST READY...'];
-  const minimumDisplayTime = 1400;
+  const minimumDisplayTime = 5000; // 5 seconds
   const startedAt = performance.now();
   let languageIndex = 0;
   let progress = 0;
@@ -63,13 +63,13 @@
   const progressTimer = window.setInterval(() => {
     const minimumTimeElapsed = performance.now() - startedAt >= minimumDisplayTime;
     const maximumProgress = pageLoaded && minimumTimeElapsed ? 100 : 92;
-    const increment = pageLoaded && minimumTimeElapsed ? 5 : Math.random() * 2.5;
+    const increment = pageLoaded && minimumTimeElapsed ? 3 : Math.random() * 1.2; // Slower increment
 
     progress = Math.min(maximumProgress, progress + increment);
     setProgress();
 
     if (progress === 100) finish();
-  }, 120);
+  }, 150); // Slightly slower update interval
 
   window.addEventListener('load', () => { pageLoaded = true; }, { once: true });
 })();
