@@ -1,168 +1,329 @@
-// Glassmorphism Music Player with Real-time Visualizer
+// Auto-hiding music player controls with an audio-reactive background wave.
 const audio = document.getElementById('hero-audio');
-const musicBtn = document.getElementById('music-toggle-btn');
-const visualizerBars = document.querySelectorAll('.music-visualizer .bar');
+const player = document.getElementById('music-player');
+const panelToggle = document.getElementById('music-toggle');
+const playToggle = document.getElementById('music-play-toggle');
+const seekBar = document.getElementById('seek-bar');
+const volumeBar = document.getElementById('volume-bar');
+const currentTime = document.getElementById('current-time');
+const duration = document.getElementById('duration');
+const seekBackward = document.getElementById('seek-backward');
+const seekForward = document.getElementById('seek-forward');
+const soundwaveCanvas = document.getElementById('soundwave-bg');
 
-// Audio Context for Visualizer
-let audioCtx, analyser, source, dataArray;
+const AUTO_HIDE_DELAY = 6000;
+let hideTimer;
+let progressAnimationId;
+let idleWaveAnimationId;
+let spectrumAnimationId;
+let audioContext;
+let analyser;
+let audioSource;
+let waveformData;
+let backgroundMode = 'idle';
+const soundwaveContext = soundwaveCanvas?.getContext('2d');
 
-function initAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048; // Much higher for more detail
-    analyser.smoothingTimeConstant = 0.6; // Less smoothing for more responsiveness
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    source = audioCtx.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
+const formatTime = (seconds) => {
+  if (!Number.isFinite(seconds)) return '0:00';
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+};
+
+const setRangeProgress = (range) => {
+  const min = Number(range.min) || 0;
+  const max = Number(range.max) || 1;
+  const value = Number(range.value);
+  const progress = ((value - min) / (max - min)) * 100;
+  range.style.setProperty('--progress', `${Math.max(0, Math.min(progress, 100))}%`);
+};
+
+const setPlayerOpen = (shouldOpen) => {
+  player.classList.toggle('is-open', shouldOpen);
+  panelToggle.setAttribute('aria-expanded', String(shouldOpen));
+  panelToggle.setAttribute('aria-label', shouldOpen ? 'Hide music player' : 'Open music player');
+};
+
+const clearAutoHide = () => window.clearTimeout(hideTimer);
+
+const queueAutoHide = () => {
+  clearAutoHide();
+  hideTimer = window.setTimeout(() => setPlayerOpen(false), AUTO_HIDE_DELAY);
+};
+
+const showPlayer = () => {
+  setPlayerOpen(true);
+  queueAutoHide();
+};
+
+const resizeSoundwaveCanvas = () => {
+  if (!soundwaveCanvas) return;
+
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  soundwaveCanvas.width = Math.floor(window.innerWidth * pixelRatio);
+  soundwaveCanvas.height = Math.floor(window.innerHeight * pixelRatio);
+  soundwaveCanvas.style.width = `${window.innerWidth}px`;
+  soundwaveCanvas.style.height = `${window.innerHeight}px`;
+  soundwaveContext?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+};
+
+const drawIdleWave = (time) => {
+  if (!soundwaveContext || backgroundMode !== 'idle') return;
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const centerY = height / 2;
+  const gradient = soundwaveContext.createLinearGradient(0, centerY, width, centerY);
+  gradient.addColorStop(0, '#00ffe7');
+  gradient.addColorStop(0.6, '#3a8bfd');
+  gradient.addColorStop(1, '#ffe259');
+
+  soundwaveContext.clearRect(0, 0, width, height);
+  soundwaveContext.save();
+  soundwaveContext.shadowColor = '#00ffe7';
+  soundwaveContext.shadowBlur = 32;
+  soundwaveContext.strokeStyle = gradient;
+  soundwaveContext.lineWidth = 6;
+  soundwaveContext.beginPath();
+
+  for (let x = 0; x <= width; x += 2) {
+    const phase = time * 0.0005;
+    const y = centerY
+      + Math.sin(x * 0.012 + phase) * 32
+      + Math.sin(x * 0.021 - phase * 1.5) * 18;
+    if (x === 0) soundwaveContext.moveTo(x, y);
+    else soundwaveContext.lineTo(x, y);
   }
-}
 
-// Update visualizer bars based on audio frequency
-function updateVisualizer() {
-  if (!analyser) return;
-  
-  analyser.getByteFrequencyData(dataArray);
-  
-  // Map frequency data to 5 bars
-  visualizerBars.forEach((bar, index) => {
-    const dataIndex = Math.floor((index / visualizerBars.length) * dataArray.length);
-    const value = dataArray[dataIndex];
-    const height = Math.max(8, (value / 255) * 35); // Min 8px, max 35px
-    bar.style.height = `${height}px`;
+  soundwaveContext.stroke();
+  soundwaveContext.restore();
+  idleWaveAnimationId = requestAnimationFrame(drawIdleWave);
+};
+
+const startIdleWave = () => {
+  if (!soundwaveContext || backgroundMode === 'idle') return;
+
+  backgroundMode = 'idle';
+  window.cancelAnimationFrame(spectrumAnimationId);
+  idleWaveAnimationId = requestAnimationFrame(drawIdleWave);
+};
+
+const drawAudioSpectrum = () => {
+  if (!soundwaveContext || !analyser || backgroundMode !== 'spectrum') return;
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const gradient = soundwaveContext.createLinearGradient(0, 0, width, 0);
+  gradient.addColorStop(0, '#3a8bfd');
+  gradient.addColorStop(0.3, '#6a5cff');
+  gradient.addColorStop(0.7, '#a259ff');
+  gradient.addColorStop(1, '#ec4899');
+
+  analyser.getByteTimeDomainData(waveformData);
+  soundwaveContext.clearRect(0, 0, width, height);
+  soundwaveContext.save();
+  soundwaveContext.strokeStyle = gradient;
+  soundwaveContext.lineWidth = 3;
+  soundwaveContext.shadowColor = '#3a8bfd';
+  soundwaveContext.shadowBlur = 20;
+  soundwaveContext.lineCap = 'round';
+  soundwaveContext.lineJoin = 'round';
+  soundwaveContext.beginPath();
+
+  const sliceWidth = width / waveformData.length;
+  waveformData.forEach((sample, index) => {
+    const x = index * sliceWidth;
+    const y = (sample / 255) * height;
+    if (index === 0) soundwaveContext.moveTo(x, y);
+    else soundwaveContext.lineTo(x, y);
   });
-  
-  if (musicBtn.classList.contains('playing')) {
-    requestAnimationFrame(updateVisualizer);
+
+  soundwaveContext.stroke();
+  soundwaveContext.restore();
+  spectrumAnimationId = requestAnimationFrame(drawAudioSpectrum);
+};
+
+const startAudioSpectrum = () => {
+  if (!soundwaveContext || !analyser || backgroundMode === 'spectrum') return;
+
+  backgroundMode = 'spectrum';
+  window.cancelAnimationFrame(idleWaveAnimationId);
+  spectrumAnimationId = requestAnimationFrame(drawAudioSpectrum);
+};
+
+const initialiseAudioAnalyser = async () => {
+  if (!audioContext) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+
+    audioContext = new AudioContext();
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.6;
+    waveformData = new Uint8Array(analyser.frequencyBinCount);
+    audioSource = audioContext.createMediaElementSource(audio);
+    audioSource.connect(analyser);
+    analyser.connect(audioContext.destination);
   }
+
+  if (audioContext.state === 'suspended') await audioContext.resume();
+};
+
+if (soundwaveContext) {
+  resizeSoundwaveCanvas();
+  window.addEventListener('resize', resizeSoundwaveCanvas);
+  backgroundMode = 'starting';
+  startIdleWave();
 }
 
-// Play/Pause Toggle
-if (musicBtn && audio) {
-  musicBtn.addEventListener('click', () => {
+if (
+  audio
+  && player
+  && panelToggle
+  && playToggle
+  && seekBar
+  && volumeBar
+  && currentTime
+  && duration
+  && seekBackward
+  && seekForward
+) {
+  const syncDuration = () => {
+    if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+
+    seekBar.max = String(audio.duration);
+    duration.textContent = formatTime(audio.duration);
+    setRangeProgress(seekBar);
+  };
+
+  const syncProgress = () => {
+    syncDuration();
+    seekBar.value = String(Math.min(audio.currentTime, Number(seekBar.max)));
+    currentTime.textContent = formatTime(audio.currentTime);
+    setRangeProgress(seekBar);
+  };
+
+  const renderProgress = () => {
+    syncProgress();
+    if (!audio.paused) progressAnimationId = requestAnimationFrame(renderProgress);
+  };
+
+  const startProgressUpdates = () => {
+    window.cancelAnimationFrame(progressAnimationId);
+    renderProgress();
+  };
+
+  const updatePlayState = () => {
+    const isPlaying = !audio.paused;
+    player.classList.toggle('is-playing', isPlaying);
+    playToggle.innerHTML = `<i class="fas fa-${isPlaying ? 'pause' : 'play'}" aria-hidden="true"></i>`;
+    playToggle.setAttribute('aria-label', isPlaying ? 'Pause music' : 'Play music');
+  };
+
+  audio.volume = Number(volumeBar.value);
+  setRangeProgress(volumeBar);
+  setRangeProgress(seekBar);
+  syncDuration();
+  syncProgress();
+
+  panelToggle.addEventListener('click', () => {
+    if (player.classList.contains('is-open')) {
+      clearAutoHide();
+      setPlayerOpen(false);
+    } else {
+      showPlayer();
+    }
+  });
+
+  playToggle.addEventListener('click', async () => {
+    showPlayer();
     if (audio.paused) {
-      // Initialize audio context on first interaction
-      initAudioContext();
-      
-      audio.play();
-      musicBtn.classList.add('playing');
-      musicBtn.title = 'Pause Music';
-      
-      // Start visualizer
-      updateVisualizer();
-      startBackgroundVisualizer();
+      try {
+        const playback = audio.play();
+        const visualiserSetup = initialiseAudioAnalyser().catch((error) => {
+          // The optional visualizer must never stop the music from playing.
+          console.warn('Music visualizer could not start.', error);
+        });
+
+        await playback;
+        await visualiserSetup;
+        if (!audio.paused) startAudioSpectrum();
+      } catch (error) {
+        // A user gesture is required by browsers before playback can begin.
+        console.warn('Music playback could not start.', error);
+      }
     } else {
       audio.pause();
-      musicBtn.classList.remove('playing');
-      musicBtn.title = 'Play Music';
-      
-      // Stop background visualizer
-      stopBackgroundVisualizer();
     }
   });
 
-  // Handle audio end
+  [seekBackward, seekForward].forEach((button) => {
+    button.addEventListener('click', () => {
+      const direction = button === seekBackward ? -10 : 10;
+      const trackDuration = Number.isFinite(audio.duration) ? audio.duration : 0;
+      audio.currentTime = Math.max(0, Math.min(audio.currentTime + direction, trackDuration));
+      syncProgress();
+      showPlayer();
+    });
+  });
+
+  seekBar.addEventListener('input', () => {
+    audio.currentTime = Number(seekBar.value);
+    syncProgress();
+    showPlayer();
+  });
+
+  volumeBar.addEventListener('input', () => {
+    audio.volume = Number(volumeBar.value);
+    setRangeProgress(volumeBar);
+    showPlayer();
+  });
+
+  audio.addEventListener('loadedmetadata', syncDuration);
+  audio.addEventListener('durationchange', syncDuration);
+  audio.addEventListener('timeupdate', syncProgress);
+  audio.addEventListener('seeking', syncProgress);
+  audio.addEventListener('play', () => {
+    updatePlayState();
+    startProgressUpdates();
+    startAudioSpectrum();
+  });
+  audio.addEventListener('pause', () => {
+    window.cancelAnimationFrame(progressAnimationId);
+    syncProgress();
+    updatePlayState();
+    startIdleWave();
+  });
   audio.addEventListener('ended', () => {
-    musicBtn.classList.remove('playing');
-    musicBtn.title = 'Play Music';
-    stopBackgroundVisualizer();
+    window.cancelAnimationFrame(progressAnimationId);
+    updatePlayState();
+    startIdleWave();
   });
-}
 
-// Background Visualizer (Canvas)
-const soundwaveCanvas = document.getElementById('soundwave-bg');
-const soundwaveCtx = soundwaveCanvas.getContext('2d');
-let bgAnalyser, bgDataArray, bgAnimationId, isVisualizerActive = false;
+  player.addEventListener('pointerenter', clearAutoHide);
+  player.addEventListener('pointerleave', queueAutoHide);
+  player.addEventListener('focusin', clearAutoHide);
+  player.addEventListener('focusout', () => {
+    window.setTimeout(() => {
+      if (!player.contains(document.activeElement)) queueAutoHide();
+    }, 0);
+  });
 
-// Neon Sine Wave Animation (Default)
-let neonWaveAnimId = null;
-function drawNeonWave(time) {
-  soundwaveCtx.clearRect(0, 0, soundwaveCanvas.width, soundwaveCanvas.height);
-  const grad = soundwaveCtx.createLinearGradient(0, soundwaveCanvas.height/2, soundwaveCanvas.width, soundwaveCanvas.height/2);
-  grad.addColorStop(0, '#00ffe7');
-  grad.addColorStop(0.6, '#3a8bfd');
-  grad.addColorStop(1, '#ffe259');
-  soundwaveCtx.save();
-  soundwaveCtx.shadowColor = '#00ffe7';
-  soundwaveCtx.shadowBlur = 32;
-  soundwaveCtx.strokeStyle = grad;
-  soundwaveCtx.lineWidth = 6;
-  soundwaveCtx.beginPath();
-  for (let x = 0; x <= soundwaveCanvas.width; x += 2) {
-    const t = time * 0.0005;
-    const y = soundwaveCanvas.height/2 + Math.sin(x * 0.012 + t) * 32 + Math.sin(x * 0.021 - t * 1.5) * 18;
-    if (x === 0) {
-      soundwaveCtx.moveTo(x, y);
-    } else {
-      soundwaveCtx.lineTo(x, y);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && player.classList.contains('is-open')) {
+      clearAutoHide();
+      setPlayerOpen(false);
+      panelToggle.focus();
     }
-  }
-  soundwaveCtx.stroke();
-  soundwaveCtx.restore();
-  neonWaveAnimId = requestAnimationFrame(drawNeonWave);
-}
-requestAnimationFrame(drawNeonWave);
+  });
 
-// Audio Visualizer (When Playing)
-function startBackgroundVisualizer() {
-  if (!analyser) return;
-  
-  bgAnalyser = analyser;
-  bgDataArray = new Uint8Array(bgAnalyser.frequencyBinCount);
-  isVisualizerActive = true;
-  cancelAnimationFrame(neonWaveAnimId);
-  drawBackgroundVisualizer();
-}
-
-function stopBackgroundVisualizer() {
-  isVisualizerActive = false;
-  if (bgAnimationId) cancelAnimationFrame(bgAnimationId);
-  requestAnimationFrame(drawNeonWave);
-}
-
-function drawBackgroundVisualizer() {
-  soundwaveCtx.clearRect(0, 0, soundwaveCanvas.width, soundwaveCanvas.height);
-  bgAnalyser.getByteTimeDomainData(bgDataArray);
-  
-  soundwaveCtx.save();
-  
-  // Create gradient for the waveform
-  const grad = soundwaveCtx.createLinearGradient(0, 0, soundwaveCanvas.width, 0);
-  grad.addColorStop(0, '#3a8bfd');
-  grad.addColorStop(0.3, '#6a5cff');
-  grad.addColorStop(0.7, '#a259ff');
-  grad.addColorStop(1, '#ec4899');
-  
-  soundwaveCtx.strokeStyle = grad;
-  soundwaveCtx.lineWidth = 3;
-  soundwaveCtx.shadowColor = '#3a8bfd';
-  soundwaveCtx.shadowBlur = 20;
-  soundwaveCtx.lineCap = 'round';
-  soundwaveCtx.lineJoin = 'round';
-  
-  soundwaveCtx.beginPath();
-  
-  const sliceWidth = soundwaveCanvas.width / bgDataArray.length;
-  let x = 0;
-  
-  for (let i = 0; i < bgDataArray.length; i++) {
-    const v = bgDataArray[i] / 128.0; // Normalize to 0-2
-    const y = (v * soundwaveCanvas.height) / 2;
-    
-    if (i === 0) {
-      soundwaveCtx.moveTo(x, y);
-    } else {
-      soundwaveCtx.lineTo(x, y);
+  document.addEventListener('pointerdown', (event) => {
+    if (!player.contains(event.target)) {
+      clearAutoHide();
+      setPlayerOpen(false);
     }
-    
-    x += sliceWidth;
-  }
-  
-  soundwaveCtx.stroke();
-  soundwaveCtx.restore();
-  
-  if (isVisualizerActive) {
-    bgAnimationId = requestAnimationFrame(drawBackgroundVisualizer);
-  }
+  });
+
+  updatePlayState();
 }

@@ -11,12 +11,36 @@
   <link rel="icon" href="assets/img/fav-icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/loading-screen.css">
+  <link rel="stylesheet" href="assets/css/music-player.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
   <body>
+    <div class="site-loader" id="site-loader" role="status" aria-live="polite" aria-label="Loading website">
+      <div class="site-loader__corner site-loader__corner--top-left" aria-hidden="true"></div>
+      <div class="site-loader__corner site-loader__corner--bottom-right" aria-hidden="true"></div>
+      <div class="site-loader__line site-loader__line--one" aria-hidden="true"></div>
+      <div class="site-loader__line site-loader__line--two" aria-hidden="true"></div>
+      <div class="site-loader__line site-loader__line--three" aria-hidden="true"></div>
+      <main class="site-loader__content">
+        <div class="site-loader__label">SYSTEM INITIALIZING</div>
+        <div class="site-loader__word" id="site-loader-word" data-text="LOADING">
+          <span class="site-loader__glitch-bars" aria-hidden="true"></span>LOADING
+        </div>
+        <span class="site-loader__cursor" aria-hidden="true"></span>
+        <div class="site-loader__progress-area">
+          <div class="site-loader__progress-value" id="site-loader-progress-value">0%</div>
+          <div class="site-loader__progress-track">
+            <div class="site-loader__progress-fill" id="site-loader-progress-fill"></div>
+            <div class="site-loader__progress-scan" aria-hidden="true"></div>
+          </div>
+          <div class="site-loader__status" id="site-loader-status">INITIALIZING...</div>
+        </div>
+      </main>
+    </div>
     <!-- Soundwave Background -->
-    <canvas id="soundwave-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;"></canvas>
+    <canvas id="soundwave-bg" aria-hidden="true"></canvas>
     <!-- notification for small viewports and landscape oriented smartphones -->
     <div class="perspective effect-rotate-left">
       <div class="container">
@@ -277,60 +301,68 @@
       </ul>
     </div>
 
-    <!-- Music Button with Glassmorphism & Visualizer -->
+    <!-- Auto-hiding music player -->
     <audio id="hero-audio" loop>
       <source src="assets/audio/Crystals - Hotline Miami Soundtrack.mp3" type="audio/mpeg">
     </audio>
-    <button id="music-toggle-btn" class="music-hero-btn" title="Play Music">
-      <div class="music-visualizer">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+    <aside class="music-player" id="music-player" aria-label="Music player">
+      <button
+        id="music-toggle"
+        class="music-toggle"
+        type="button"
+        aria-controls="music-player"
+        aria-expanded="false"
+        aria-label="Open music player"
+      >
+        <span class="music-toggle__echo" aria-hidden="true"></span>
+        <span class="music-toggle__echo" aria-hidden="true"></span>
+        <span class="music-toggle__echo" aria-hidden="true"></span>
+        <i class="fas fa-music" aria-hidden="true"></i>
+      </button>
+
+      <div class="music-player__content">
+        <div class="player-header">
+          <img class="album-art" src="assets/img/life-img/symphony.png" alt="Artwork for Crystals">
+          <div class="song-info">
+            <p class="song-title">Crystals</p>
+            <p class="artist">M|O|O|N · Hotline Miami Soundtrack</p>
+          </div>
+        </div>
+
+        <div class="player-controls" aria-label="Playback controls">
+          <button class="player-control" id="seek-backward" type="button" aria-label="Rewind 10 seconds">
+            <i class="fas fa-undo" aria-hidden="true"></i>
+          </button>
+          <button class="player-control player-control--primary" id="music-play-toggle" type="button" aria-label="Play music">
+            <i class="fas fa-play" aria-hidden="true"></i>
+          </button>
+          <button class="player-control" id="seek-forward" type="button" aria-label="Forward 10 seconds">
+            <i class="fas fa-redo" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="seek-container">
+          <div class="time-row" aria-live="off">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+          <input id="seek-bar" class="range-control" type="range" min="0" max="0" value="0" step="0.1" aria-label="Track progress">
+        </div>
+
+        <label class="volume-row" for="volume-bar">
+          <i class="fas fa-volume-down" aria-hidden="true"></i>
+          <input id="volume-bar" class="range-control" type="range" min="0" max="1" value="0.75" step="0.01" aria-label="Volume">
+          <i class="fas fa-volume-up" aria-hidden="true"></i>
+        </label>
       </div>
-      <i class="fas fa-music music-icon"></i>
-    </button>
+    </aside>
 
     <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="assets/js/functions-min.js"></script>
     <script src="assets/js/typed.js"></script>
-    <script>
-      // Soundwave animation background
-      const canvas = document.getElementById('soundwave-bg');
-      const ctx = canvas.getContext('2d');
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
-      // Soundwave parameters
-      const waves = [
-        { amplitude: 40, frequency: 0.015, speed: 0.015, color: 'rgba(0,180,255,0.5)', offset: 0 },
-        { amplitude: 25, frequency: 0.022, speed: 0.018, color: 'rgba(0,120,255,0.3)', offset: 100 },
-        { amplitude: 15, frequency: 0.03, speed: 0.022, color: 'rgba(0,60,255,0.2)', offset: 200 }
-      ];
-      function drawWaves(time) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        waves.forEach(wave => {
-          ctx.beginPath();
-          for (let x = 0; x <= canvas.width; x += 2) {
-            const y = canvas.height/2 + Math.sin(x * wave.frequency + time * wave.speed + wave.offset) * wave.amplitude;
-            ctx.lineTo(x, y);
-          }
-          ctx.strokeStyle = wave.color;
-          ctx.lineWidth = 3;
-          ctx.stroke();
-        });
-        requestAnimationFrame(drawWaves);
-      }
-      requestAnimationFrame(drawWaves);
-    </script>
-
-  <link rel="stylesheet" href="assets/css/music-player.css">
-  <script src="assets/js/music-player.js"></script>
+    <script src="assets/js/music-player.js"></script>
+    <script src="assets/js/loading-screen.js"></script>
   </body>
 </html>
