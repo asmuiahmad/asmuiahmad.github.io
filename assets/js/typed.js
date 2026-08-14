@@ -17,7 +17,7 @@ const startMainPageAnimations = () => {
     if (mainTitle) {
         const languages = [
             { text: 'Hello <br>Everyone', needsBr: false },           // English
-            { text: '大家好<br><br>', needsBr: false },                    // Mandarin
+            { text: '大家好 <br><br>', needsBr: false },                    // Mandarin
             { text: 'こんにちは <br>みなさん', needsBr: true },    // Japanese
             { text: '안녕하세요 <br>여러분', needsBr: true },      // Korean
             { text: 'Hola a <br>Todos', needsBr: false },            // Spanish
