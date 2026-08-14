@@ -1,0 +1,215 @@
+/* 3D Carousel Styles */
+.carousel-container-3d {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 500px;
+    perspective: 1000px;
+    margin: 2rem auto;
+}
+
+.carousel-3d {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s ease;
+}
+
+.card-3d {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: all 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.card-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0) 60%);
+    z-index: -1;
+}
+
+.card-3d-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.card-3d:hover .card-3d-img {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.card-3d-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+}
+
+.card-3d-desc {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card-3d-btn {
+    background: rgba(125, 211, 252, 0.1);
+    color: #7dd3fc;
+    border: 1px solid #7dd3fc;
+    padding: 10px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.card-3d-btn:hover {
+    background: #7dd3fc;
+    color: #0f172a;
+    box-shadow: 0 0 20px rgba(125, 211, 252, 0.5);
+}
+
+.nav-btn-3d {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.nav-btn-3d:hover {
+    background: #7dd3fc;
+    color: #0f172a;
+}
+
+.prev-3d {
+    left: 20px;
+}
+
+.next-3d {
+    right: 20px;
+}
+
+.indicators-3d {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.indicator-3d {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator-3d.active {
+    background: #7dd3fc;
+    transform: scale(1.2);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .carousel-container-3d {
+        height: 450px;
+    }
+    
+    .card-3d {
+        width: 260px;
+        height: 350px;
+    }
+    
+    .card-3d-img {
+        height: 160px;
+    }
+    
+    .nav-btn-3d {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .prev-3d {
+        left: 10px;
+    }
+    
+    .next-3d {
+        right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container-3d {
+        height: 400px;
+    }
+    
+    .card-3d {
+        width: 220px;
+        height: 320px;
+        padding: 15px;
+    }
+    
+    .card-3d-img {
+        height: 140px;
+    }
+    
+    .card-3d-title {
+        font-size: 1.2rem;
+    }
+    
+    .card-3d-desc {
+        font-size: 0.8rem;
+    }
+}

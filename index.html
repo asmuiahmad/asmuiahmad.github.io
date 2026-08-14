@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/responsive.css">
   <link rel="stylesheet" href="assets/css/loading-screen.css">
   <link rel="stylesheet" href="assets/css/music-player.css">
+  <link rel="stylesheet" href="assets/css/carousel-3d.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
@@ -130,60 +131,16 @@
               <!-- 02 section life -->
               <li class="l-section section">
 
-                <!-- life section -->
+                <!-- life section with 3D carousel -->
                 <div class="life">
                   <h2>Life flashes before my eyes</h2>
-                  <div class="life--lockup">
-                    <ul class="slider">
-                      <li class="slider--item slider--item-left">
-                        <a href="#0">
-                          <div class="slider--item-image">
-                            <img src="assets/img/life-img/machine.png" alt="Machine">
-                          </div>
-                          <p class="slider--item-title">Machine</p>
-                          <p class="slider--item-description">Crafting wonders, day and night. Building worlds from thought and air.</p>
-                        </a>
-                      </li>
-                      <li class="slider--item slider--item-center">
-                        <a href="#0">
-                          <div class="slider--item-image">
-                            <img src="assets/img/life-img/symphony.png" alt="Symphony">
-                          </div>
-                          <p class="slider--item-title">Symphony</p>
-                          <p class="slider--item-description"> A sound that dances through day & night. Beautiful eyes reflect the skies.</p>
-                        </a>
-                      </li>
-                      <li class="slider--item slider--item-right">
-                        <a href="#0">
-                          <div class="slider--item-image">
-                            <img src="assets/img/life-img/fantasy.png" alt="Fantasy">
-                          </div>
-                          <p class="slider--item-title">Fantasy</p>
-                          <p class="slider--item-description">In realms where dragons soar and magic whispers.</p>
-                        </a>
-                      </li>
-                    </ul>
-                    <div class="slider--prev">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
-                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                          <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
-                      c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
-                      c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z" />
-                        </g>
-                      </svg>
+                  <div class="carousel-container-3d">
+                    <button class="nav-btn-3d prev-3d" aria-label="Previous">❮</button>
+                    <div class="carousel-3d">
+                      <!-- Cards will be added dynamically with JS -->
                     </div>
-                    <div class="slider--next">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
-                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                          <path
-                            d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
-                        </g>
-                      </svg>
-                    </div>
+                    <button class="nav-btn-3d next-3d" aria-label="Next">❯</button>
+                    <div class="indicators-3d"></div>
                   </div>
                 </div>
               </li>
@@ -363,6 +320,7 @@
     <script src="assets/js/functions-min.js"></script>
     <script src="assets/js/typed.js"></script>
     <script src="assets/js/music-player.js"></script>
+    <script src="assets/js/carousel-3d.js"></script>
     <script src="assets/js/loading-screen.js"></script>
   </body>
 </html>

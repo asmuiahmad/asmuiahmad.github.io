@@ -16,16 +16,16 @@ const startMainPageAnimations = () => {
     const mainTitle = document.getElementById('main-title');
     if (mainTitle) {
         const languages = [
-            { text: 'Hello <br>Everyone', needsBr: false },           // English
-            { text: '大家好 <br><br>', needsBr: false },                    // Mandarin
-            { text: 'こんにちは <br>みなさん', needsBr: true },    // Japanese
-            { text: '안녕하세요 <br>여러분', needsBr: true },      // Korean
-            { text: 'Hola a <br>Todos', needsBr: false },            // Spanish
-            { text: 'Привет <br>Всем', needsBr: false },             // Russian
-            { text: 'مرحبا<br> بالجميع', needsBr: true },        // Arabic
-            { text: 'Ciao a <br>Tutti', needsBr: false },            // Italian
-            { text: 'Bonjour à <br>Tous', needsBr: true },        // French
-            { text: 'Hallo <br>Zusammen', needsBr: true }         // German
+            { text: 'Hello <br>Everyone', needsBr: false, rtl: false },           // English
+            { text: '大家好 <br><br>', needsBr: false, rtl: false },                    // Mandarin
+            { text: 'こんにちは <br>みなさん', needsBr: true, rtl: false },    // Japanese
+            { text: '안녕하세요 <br>여러분', needsBr: true, rtl: false },      // Korean
+            { text: 'Hola a <br>Todos', needsBr: false, rtl: false },            // Spanish
+            { text: 'Привет <br>Всем', needsBr: false, rtl: false },             // Russian
+            { text: 'مرحبا<br> بالجميع', needsBr: true, rtl: true },        // Arabic (RTL)
+            { text: 'Ciao a <br>Tutti', needsBr: false, rtl: false },            // Italian
+            { text: 'Bonjour à <br>Tous', needsBr: true, rtl: false },        // French
+            { text: 'Hallo <br>Zusammen', needsBr: true, rtl: false }         // German
         ];
         
         let currentIndex = 0;
@@ -38,7 +38,16 @@ const startMainPageAnimations = () => {
                 const current = languages[currentIndex];
                 
                 mainTitle.innerHTML = current.text;
-                mainTitle.setAttribute('data-text', current.text.replace('<br>', ' '));
+                mainTitle.setAttribute('data-text', current.text.replace(/<br>/g, ' '));
+                
+                // Set text direction for RTL languages
+                if (current.rtl) {
+                    mainTitle.style.direction = 'rtl';
+                    mainTitle.style.textAlign = 'right';
+                } else {
+                    mainTitle.style.direction = 'ltr';
+                    mainTitle.style.textAlign = 'left';
+                }
                 
                 mainTitle.classList.remove('is-glitching');
             }, 180); // Half of glitch animation
