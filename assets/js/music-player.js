@@ -1,4 +1,4 @@
-// Auto-hiding music player controls with an audio-reactive background wave.
+// Auto-hiding music player controls with an audio-reactive background wave and Discord status.
 const audio = document.getElementById('hero-audio');
 const player = document.getElementById('music-player');
 const panelToggle = document.getElementById('music-toggle');
@@ -10,6 +10,11 @@ const duration = document.getElementById('duration');
 const seekBackward = document.getElementById('seek-backward');
 const seekForward = document.getElementById('seek-forward');
 const soundwaveCanvas = document.getElementById('soundwave-bg');
+
+// Discord status elements
+const statusDotInline = document.getElementById('status-dot-inline');
+const statusTextInline = document.getElementById('status-text-inline');
+const activityContainerInline = document.getElementById('discord-activity-inline');
 
 const AUTO_HIDE_DELAY = 6000;
 let hideTimer;
@@ -169,6 +174,141 @@ const initialiseAudioAnalyser = async () => {
 
   if (audioContext.state === 'suspended') await audioContext.resume();
 };
+
+// ==================== DISCORD STATUS ====================
+const updateDiscordStatus = (status, activities = []) => {
+  statusDotInline.classList.remove('online', 'idle', 'dnd', 'offline');
+  statusDotInline.classList.add(status);
+
+  const statusMap = {
+    online: 'Online',
+    idle: 'Idle',
+    dnd: 'Do Not Disturb',
+    offline: 'Offline'
+  };
+  statusTextInline.textContent = statusMap[status] || 'Unknown';
+
+  // Show activity
+  activityContainerInline.innerHTML = '';
+  if (activities && activities.length > 0) {
+    const activity = activities[0];
+    if (activity.name) {
+      const icons = {
+        'Visual Studio Code': '💻',
+        'Code': '💻',
+        'Gaming': '🎮',
+        'Music': '🎵',
+        'default': '🎮'
+      };
+      let icon = icons['default'];
+      for (const [key, val] of Object.entries(icons)) {
+        if (activity.name.includes(key)) {
+          icon = val;
+          break;
+        }
+      }
+      activityContainerInline.textContent = `${icon} ${activity.name}`;
+    }
+  }
+};
+
+const fetchDiscordStatus = async () => {
+  // Discord User ID for asmui_ahmad - UPDATE THIS WITH YOUR ACTUAL ID
+  // To find your ID: Enable Developer Mode in Discord → Right-click your username → Copy User ID
+  const DISCORD_USER_ID = 'YOUR_USER_ID_HERE'; // Replace with your actual Discord user ID
+  
+  if (DISCORD_USER_ID === 'YOUR_USER_ID_HERE') {
+    // Demo mode - show random status
+    const statuses = ['online', 'idle', 'offline'];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+    updateDiscordStatus(randomStatus);
+    return;
+  }
+
+  try {
+    const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
+    if (!response.ok) throw new Error('Failed to fetch');
+    
+    const data = await response.json();
+    if (data.success && data.data) {
+      const status = data.data.discord_status || 'offline';
+      const activities = data.data.activities || [];
+      updateDiscordStatus(status, activities);
+    }
+  } catch (error) {
+    console.warn('Discord status error:', error);
+    updateDiscordStatus('offline');
+  }
+};
+
+// ==================== DISCORD MESSAGING ====================
+const messageInput = document.getElementById('discord-message-input');
+const sendBtn = document.getElementById('discord-send-btn');
+const dmStatus = document.getElementById('dm-status');
+
+const sendDiscordMessage = () => {
+  const message = messageInput.value.trim();
+  
+  if (!message) {
+    dmStatus.textContent = 'Type a message first';
+    dmStatus.classList.add('error');
+    setTimeout(() => {
+      dmStatus.textContent = '';
+      dmStatus.classList.remove('error');
+    }, 2000);
+    return;
+  }
+
+  sendBtn.disabled = true;
+  dmStatus.textContent = 'Opening Discord...';
+  dmStatus.classList.remove('success', 'error');
+
+  try {
+    // Copy message to clipboard
+    navigator.clipboard.writeText(message).then(() => {
+      dmStatus.textContent = '✓ Message copied to clipboard!';
+      dmStatus.classList.add('success');
+      messageInput.value = '';
+      
+      // Open Discord to chat with asmui_ahmad
+      // Discord usernames can be opened via: discord.com/users/@username or discord app
+      window.open('https://discord.com/users/asmui_ahmad', '_blank');
+      
+      setTimeout(() => {
+        dmStatus.textContent = '';
+        dmStatus.classList.remove('success');
+      }, 3000);
+    }).catch(() => {
+      throw new Error('Clipboard failed');
+    });
+
+  } catch (error) {
+    console.error('Message error:', error);
+    dmStatus.textContent = '✗ Failed - open Discord manually';
+    dmStatus.classList.add('error');
+    
+    // Still open Discord if clipboard fails
+    window.open('https://discord.com/users/asmui_ahmad', '_blank');
+    
+    setTimeout(() => {
+      dmStatus.textContent = '';
+      dmStatus.classList.remove('error');
+    }, 3000);
+  } finally {
+    sendBtn.disabled = false;
+  }
+};
+
+if (messageInput && sendBtn) {
+  sendBtn.addEventListener('click', sendDiscordMessage);
+  
+  messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendDiscordMessage();
+    }
+  });
+}
 
 // Initialize soundwave only after loading is complete
 const initSoundwave = () => {

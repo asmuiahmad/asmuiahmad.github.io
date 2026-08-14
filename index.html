@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="assets/css/loading-screen.css">
   <link rel="stylesheet" href="assets/css/music-player.css">
   <link rel="stylesheet" href="assets/css/carousel-3d.css">
+  <link rel="stylesheet" href="assets/css/discord-status.css">
+  <link rel="stylesheet" href="assets/css/control-panel.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
@@ -258,11 +260,16 @@
       </ul>
     </div>
 
-    <!-- Auto-hiding music player -->
+    <!-- Audio element for music -->
     <audio id="hero-audio" loop>
       <source src="assets/audio/Crystals - Hotline Miami Soundtrack.mp3" type="audio/mpeg">
     </audio>
-    <aside class="music-player" id="music-player" aria-label="Music player">
+
+    <!-- Soundwave Background -->
+    <canvas id="soundwave-bg" aria-hidden="true"></canvas>
+
+    <!-- Combined Music Player + Discord Status -->
+    <aside class="music-player" id="music-player" aria-label="Music player and Discord status">
       <button
         id="music-toggle"
         class="music-toggle"
@@ -278,6 +285,46 @@
       </button>
 
       <div class="music-player__content">
+        <!-- Discord Status Section (top) -->
+        <div class="discord-section-inline">
+          <div class="section-title-inline">
+            <i class="fab fa-discord"></i>
+            <span>Discord Status</span>
+          </div>
+          <div class="discord-info-inline">
+            <span class="status-dot-inline" id="status-dot-inline"></span>
+            <span class="status-text-inline" id="status-text-inline">Checking...</span>
+          </div>
+          <div class="discord-activity-inline" id="discord-activity-inline"></div>
+          
+          <!-- Discord DM Section -->
+          <div class="discord-dm-section">
+            <div class="dm-label">Chat with me</div>
+            <div class="dm-input-group">
+              <input 
+                type="text" 
+                id="discord-message-input" 
+                class="discord-message-input" 
+                placeholder="Type your message..." 
+                maxlength="100"
+                aria-label="Send Discord message"
+              >
+              <button 
+                id="discord-send-btn" 
+                class="discord-send-btn" 
+                aria-label="Send message"
+                title="Send to Discord"
+              >
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="dm-status" id="dm-status"></div>
+          </div>
+          
+          <div class="divider-inline"></div>
+        </div>
+
+        <!-- Music Player Section (bottom) -->
         <div class="player-header">
           <img class="album-art" src="assets/img/life-img/symphony.png" alt="Artwork for Crystals">
           <div class="song-info">
@@ -319,8 +366,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="assets/js/functions-min.js"></script>
     <script src="assets/js/typed.js"></script>
-    <script src="assets/js/music-player.js"></script>
     <script src="assets/js/carousel-3d.js"></script>
     <script src="assets/js/loading-screen.js"></script>
+    <script src="assets/js/music-player.js"></script>
   </body>
 </html>
