@@ -771,7 +771,79 @@ html {
     font-size: 68px;
     font-weight: 900;
     line-height: 1;
-    z-index: 1
+    z-index: 1;
+    display: inline-block;
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 15px rgba(120, 190, 255, 0.95), 0 0 35px rgba(50, 140, 255, 0.6);
+    will-change: transform, filter, opacity;
+    max-width: 600px; /* Prevent touching astronaut image */
+}
+
+.intro--banner h1.multilang-title {
+    word-break: break-word;
+}
+
+.intro--banner h1::before,
+.intro--banner h1::after {
+    position: absolute;
+    inset: 0;
+    content: attr(data-text);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.intro--banner h1::before {
+    color: #3c9dff;
+    transform: translateX(-4px);
+    clip-path: inset(0 0 60% 0);
+}
+
+.intro--banner h1::after {
+    color: #d7f0ff;
+    transform: translateX(4px);
+    clip-path: inset(60% 0 0 0);
+}
+
+.intro--banner h1.is-glitching {
+    animation: site-loader-glitch-main 360ms steps(2, end);
+}
+
+.intro--banner h1.is-glitching::before {
+    opacity: 0.9;
+    animation: site-loader-glitch-top 360ms steps(2, end);
+}
+
+.intro--banner h1.is-glitching::after {
+    opacity: 0.8;
+    animation: site-loader-glitch-bottom 360ms steps(2, end);
+}
+
+@keyframes site-loader-glitch-main {
+    0%, 100% { filter: brightness(1); transform: translate(0); }
+    12% { filter: brightness(1.8); transform: translate(-7px, 1px); }
+    25% { transform: translate(6px, -2px); }
+    38% { filter: brightness(1.2); transform: translate(-3px, 2px); }
+    52% { transform: translate(8px); }
+    68% { filter: brightness(1.6); transform: translate(-5px, -1px); }
+    82% { transform: translate(2px, 1px); }
+}
+
+@keyframes site-loader-glitch-top {
+    0% { clip-path: inset(0 0 75% 0); transform: translateX(-3px); }
+    20% { clip-path: inset(5% 0 60% 0); transform: translateX(-15px); }
+    40% { clip-path: inset(18% 0 50% 0); transform: translateX(10px); }
+    60% { clip-path: inset(0 0 65% 0); transform: translateX(-8px); }
+    80% { clip-path: inset(12% 0 52% 0); transform: translateX(12px); }
+    100% { opacity: 0; }
+}
+
+@keyframes site-loader-glitch-bottom {
+    0% { clip-path: inset(70% 0 0 0); transform: translateX(4px); }
+    20% { clip-path: inset(55% 0 8% 0); transform: translateX(15px); }
+    40% { clip-path: inset(65% 0 2% 0); transform: translateX(-12px); }
+    60% { clip-path: inset(48% 0 15% 0); transform: translateX(7px); }
+    80% { clip-path: inset(72% 0 0 0); transform: translateX(-13px); }
+    100% { opacity: 0; }
 }
 
 .intro--banner button {
