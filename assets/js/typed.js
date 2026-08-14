@@ -2,8 +2,8 @@
 const startMainPageAnimations = () => {
     // Initialize typing animation
     new Typed('.hero-typed', {
-        strings: ["","I'm Ahmad Asmu'i.","I'm a Web-Designer.","I'm a ML Engineer.",
-                  "I'm a Dreamer.", "I'm a Traveler.", "I'm a Lover."],
+        strings: ["","I'm Ahmad Asmu'i.","I'm a Web-Designer.","I'm a Developer","I'm a ML Engineer.",
+                  "I'm a Dreamer.", "I'm a Traveler.", "I'm a Lover.","I'm a Techie"],
         typeSpeed: 75,
         backSpeed: 20,
         loop: true
