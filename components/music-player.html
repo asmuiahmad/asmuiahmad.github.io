@@ -1,0 +1,92 @@
+<!-- Combined Music Player + Discord Status -->
+<aside class="music-player" id="music-player" aria-label="Music player and Discord status">
+  <button
+    id="music-toggle"
+    class="music-toggle"
+    type="button"
+    aria-controls="music-player"
+    aria-expanded="false"
+    aria-label="Open music player"
+  >
+    <span class="music-toggle__echo" aria-hidden="true"></span>
+    <span class="music-toggle__echo" aria-hidden="true"></span>
+    <span class="music-toggle__echo" aria-hidden="true"></span>
+    <i class="fas fa-music" aria-hidden="true"></i>
+  </button>
+
+  <div class="music-player__content">
+    <!-- Discord Status Section (top) -->
+    <div class="discord-section-inline">
+      <div class="section-title-inline">
+        <i class="fab fa-discord"></i>
+        <span>Discord Status</span>
+      </div>
+      <div class="discord-info-inline">
+        <span class="status-dot-inline" id="status-dot-inline"></span>
+        <span class="status-text-inline" id="status-text-inline">Checking...</span>
+      </div>
+      <div class="discord-activity-inline" id="discord-activity-inline"></div>
+      
+      <!-- Discord DM Section -->
+      <div class="discord-dm-section">
+        <div class="dm-label">Chat with me</div>
+        <div class="dm-input-group">
+          <input 
+            type="text" 
+            id="discord-message-input" 
+            class="discord-message-input" 
+            placeholder="Type your message..." 
+            maxlength="100"
+            aria-label="Send Discord message"
+          >
+          <button 
+            id="discord-send-btn" 
+            class="discord-send-btn" 
+            aria-label="Send message"
+            title="Send to Discord"
+          >
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+        <div class="dm-status" id="dm-status"></div>
+      </div>
+      
+      <div class="divider-inline"></div>
+    </div>
+
+    <!-- Music Player Section (bottom) -->
+    <div class="player-header">
+      <img class="album-art" src="assets/img/life-img/symphony.png" alt="Artwork for Crystals">
+      <div class="song-info">
+        <p class="song-title">Crystals</p>
+        <p class="artist">M|O|O|N · Hotline Miami Soundtrack</p>
+      </div>
+    </div>
+
+    <div class="player-controls" aria-label="Playback controls">
+      <button class="player-control" id="seek-backward" type="button" aria-label="Rewind 10 seconds">
+        <i class="fas fa-undo" aria-hidden="true"></i>
+      </button>
+      <button class="player-control player-control--primary" id="music-play-toggle" type="button" aria-label="Play music">
+        <i class="fas fa-play" aria-hidden="true"></i>
+      </button>
+      <button class="player-control" id="seek-forward" type="button" aria-label="Forward 10 seconds">
+        <i class="fas fa-redo" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="seek-container">
+      <div class="time-row" aria-live="off">
+        <span id="current-time">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+      <input id="seek-bar" class="range-control" type="range" min="0" max="0" value="0" step="0.1" aria-label="Track progress">
+    </div>
+
+    <label class="volume-row" for="volume-bar">
+      <i class="fas fa-volume-down" aria-hidden="true"></i>
+      <input id="volume-bar" class="range-control" type="range" min="0" max="1" value="0.75" step="0.01" aria-label="Volume">
+      <i class="fas fa-volume-up" aria-hidden="true"></i>
+    </label>
+  </div>
+</aside>
