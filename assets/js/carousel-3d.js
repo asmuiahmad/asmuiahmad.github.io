@@ -13,21 +13,18 @@ const init3DCarousel = () => {
             img: 'assets/img/life-img/machine.png',
             title: 'Machine',
             desc: 'Crafting wonders, day and night. Blueprints glow with mystic light. Building worlds from thought and air.',
-            btnText: 'Explore',
             link: '#0'
         },
         {
             img: 'assets/img/life-img/symphony.png',
             title: 'Symphony',
             desc: 'Flowers sway in the meadow\'s light. A sound that dances through day and night. Beautiful eyes reflect the skies.',
-            btnText: 'Discover',
             link: '#0'
         },
         {
             img: 'assets/img/life-img/fantasy.png',
             title: 'Fantasy',
             desc: 'In realms where dragons soar and magic whispers. Dreams unfold like ancient scrolls. Mystic lands where legends dwell.',
-            btnText: 'Dream',
             link: '#0'
         }
     ];
@@ -45,7 +42,7 @@ const init3DCarousel = () => {
                 <img src="${data.img}" alt="${data.title}" class="card-3d-img">
                 <h3 class="card-3d-title">${data.title}</h3>
                 <p class="card-3d-desc">${data.desc}</p>
-                <a href="${data.link}" class="card-3d-btn">${data.btnText}</a>
+                <a href="${data.link}">${data.btnText}</a>
             `;
             carousel.appendChild(card);
             cards.push(card);

@@ -339,7 +339,7 @@ html {
 
 .l-side-nav {
     position: absolute;
-    left: 0;
+    left: 30px;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
